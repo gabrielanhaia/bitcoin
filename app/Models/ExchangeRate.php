@@ -5,19 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Setting responsible for the model with system settings.
+ * Class ExchangeRate responsible for storing the exchange rates updated.
  * @package App\Models
- *
- * @author Gabriel Anhaia <anhaia.gabriel@gmail.com>
  */
-class Setting extends Model
+class ExchangeRate extends Model
 {
+    /** @var string $table Table name. */
+    protected $table = 'exchange_rates';
+
     /** @var array $fillable */
     protected $fillable = [
         'name',
-        'value',
+        'currency_id',
+        'amount',
+        'bitcoin_amount',
+        'datetime',
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 
     /** @var array $dates Date fields. */
