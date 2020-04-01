@@ -5,19 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Setting
+ * Class Wallet
  * @package App\Models
  *
- * Class responsible for the model with system settings.
+ * Class responsible for the user wallets.
  *
  * @author Gabriel Anhaia <anhaia.gabriel@gmail.com>
  */
-class Setting extends Model
+class Wallet extends Model
 {
     /** @var array $fillable */
     protected $fillable = [
+        'user_id',
         'name',
-        'value',
+        'address',
         'created_at',
         'updated_at'
     ];
