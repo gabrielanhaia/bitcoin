@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Entities\User as UserEntity;
+use App\Exceptions\Api\{ConflictException, InternalServerErrorException};
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -45,17 +46,15 @@ class UserService
      *
      * @param UserEntity $userEntity Entity for the user to be created.
      * @return UserEntity
-     *
-     * @throws \App\Exceptions\Api\ConflictException
-     * @throws \App\Exceptions\Api\InternalServerErrorException
-     * @throws \App\Exceptions\Api\UnprocessableEntityException
+     * @throws ConflictException
+     * @throws InternalServerErrorException
      */
     public function createUser(UserEntity $userEntity): UserEntity
     {
         $userExists = $this->userRepository->findByEmail($userEntity->getEmail());
 
         if (!empty($userExists)) {
-            throw new \Exception('User already exists.');
+            throw new ConflictException('User already exists.');
         }
 
         $userPassword = Hash::make($userEntity->getPassword());

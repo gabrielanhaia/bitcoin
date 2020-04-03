@@ -4,6 +4,7 @@
 namespace App\Repositories;
 
 use App\Entities\User as UserEntity;
+use App\Exceptions\Api\InternalServerErrorException;
 use App\Models\User;
 
 /**
@@ -71,7 +72,7 @@ class UserRepository
         ]);
 
         if (empty($userCreatedModel)) {
-            throw new \Exception;
+            throw new InternalServerErrorException('Error creating user.');
         }
 
         $userEntity->setId($userCreatedModel->id);
