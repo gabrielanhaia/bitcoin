@@ -3,13 +3,15 @@
 
 namespace App\Entities\Enums;
 
+use Eloquent\Enumeration\AbstractEnumeration;
+
 /**
  * Class TransactionTypeEnum
  * @package App\Entities\Enums
  *
  * @author Gabriel Anhaia <anhaia.gabriel@gmail.com>
  */
-class TransactionTypeEnum
+class TransactionTypeEnum extends AbstractEnumeration
 {
     /** @var string TRANSFER Status of transactions for transfers between accounts. */
     const TRANSFER = 'TRANSFER';
