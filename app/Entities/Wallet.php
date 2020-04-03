@@ -11,47 +11,13 @@ namespace App\Entities;
  *
  * @author Gabriel Anhaia <anhaia.gabriel@gmail.com>
  */
-class Wallet
+class Wallet extends AbstractEntity
 {
-    /** @var integer $id Wallet identifier. */
-    protected $id;
-
     /** @var string $name Name of the wallet (identifier created by the user). */
     protected $name;
 
     /** @var string $address Address of the wallet (hash). */
     protected $address;
-
-    /**
-     * Wallet constructor.
-     * @param int $id
-     * @param string $name
-     * @param string $address
-     */
-    public function __construct(int $id, string $name, string $address)
-    {
-        $this->id = $id;
-        $this->name = $name;
-        $this->address = $address;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     * @return Wallet
-     */
-    public function setId(int $id): Wallet
-    {
-        $this->id = $id;
-        return $this;
-    }
 
     /**
      * @return string

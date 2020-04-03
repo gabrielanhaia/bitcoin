@@ -13,11 +13,8 @@ use Carbon\Carbon;
  *
  * @author Gabriel Anhaia <anhaia.gabriel@gmail.com>
  */
-class Transaction
+class Transaction extends AbstractEntity
 {
-    /** @var integer $id Transaction identifier (database). */
-    protected $id;
-
     /** @var Wallet $wallet Wallet that owns the transaction. */
     protected $wallet;
 
@@ -53,24 +50,6 @@ class Transaction
 
     /** @var string $observation Observations related to the transaction. */
     protected $observation;
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     * @return Transaction
-     */
-    public function setId(int $id): Transaction
-    {
-        $this->id = $id;
-        return $this;
-    }
 
     /**
      * @return Wallet

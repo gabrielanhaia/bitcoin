@@ -11,11 +11,8 @@ use Carbon\Carbon;
  *
  * @author Gabriel Anhaia <anhaia.gabriel@gmail.com>
  */
-class ExchangeRate
+class ExchangeRate extends AbstractEntity
 {
-    /** @var integer $id Identifier of the exchange_rate. */
-    protected $id;
-
     /** @var Currency $currency Field with the currency related to this exchange rate. */
     protected $currency;
 
@@ -27,24 +24,6 @@ class ExchangeRate
 
     /** @var integer $bitcoinAmount Amount of bitcoins related to the amount (currency). */
     protected $bitcoinAmount;
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     * @return ExchangeRate
-     */
-    public function setId(int $id): ExchangeRate
-    {
-        $this->id = $id;
-        return $this;
-    }
 
     /**
      * @return Currency
