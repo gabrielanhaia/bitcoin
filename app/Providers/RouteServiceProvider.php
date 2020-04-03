@@ -5,6 +5,12 @@ namespace App\Providers;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
+/**
+ * Class RouteServiceProvider
+ * @package App\Providers
+ *
+ * @author Gabriel Anhaia <anhaia.gabriel@gmail.com>
+ */
 class RouteServiceProvider extends ServiceProvider
 {
     /**
@@ -14,7 +20,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $namespace = 'App\Http\Controllers';
+    protected $namespaceApi = 'App\Http\Controllers\Api';
 
     /**
      * The path to the "home" route for your application.
@@ -42,11 +48,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->mapApiRoutes();
-
-        $this->mapWebRoutes();
-
-        //
+        $this->mapApiV1Routes();
     }
 
     /**
@@ -70,11 +72,14 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapApiRoutes()
+    protected function mapApiV1Routes()
     {
-        Route::prefix('api')
-            ->middleware('api')
-            ->namespace($this->namespace)
-            ->group(base_path('routes/api.php'));
+        Route::group([
+            'middleware' => ['api', 'api_version:v1'],
+            'namespace'  => "{$this->namespaceApi}\V1",
+            'prefix'     => 'api/v1',
+        ], function ($router) {
+            require base_path('routes/api_v1.php');
+        });
     }
 }

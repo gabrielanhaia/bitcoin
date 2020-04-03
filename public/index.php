@@ -25,27 +25,6 @@ define('LARAVEL_START', microtime(true));
 
 require __DIR__.'/../vendor/autoload.php';
 
-
-use BitWasp\Bitcoin\Bitcoin;
-use BitWasp\Bitcoin\Address\AddressCreator;
-use BitWasp\Bitcoin\Crypto\Random\Random;
-use BitWasp\Bitcoin\Key\Factory\PrivateKeyFactory;
-use BitWasp\Bitcoin\Key\KeyToScript\Factory\P2pkhScriptDataFactory;
-
-$network = Bitcoin::getNetwork();
-$privateKeyFactory = new PrivateKeyFactory;
-$privateKey = $privateKeyFactory->generateCompressed(new Random());
-$publicKey = $privateKey->getPublicKey();
-
-//$hex = $privateKey->getHex();
-//$pkey = $privateKeyFactory->fromHexCompressed($hex);
-
-$addrCreator = new AddressCreator();
-$factory = new P2pkhScriptDataFactory();
-$scriptPubKey = $factory->convertKey($publicKey)->getScriptPubKey();
-$address = $addrCreator->fromOutputScript($scriptPubKey); // returns AddressInterface
-
-echo $address->getAddress($network); // prints address for $network as string
 /*
 |--------------------------------------------------------------------------
 | Turn On The Lights
