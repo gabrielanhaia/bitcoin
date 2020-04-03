@@ -52,6 +52,28 @@ class Transaction extends AbstractEntity
     protected $observation;
 
     /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'wallet' => $this->getWallet() ? $this->getWallet()->toArray() : [],
+            'type' => $this->getType() ? $this->getType()->value() : '',
+            'status' => $this->getStatus() ? $this->getStatus()->value() : '',
+            'balance' => $this->getBalance(),
+            'total_transaction' => $this->getTotalTransaction(),
+            'profit_percentage' => $this->getProfitPercentage(),
+            'total_profit' => $this->getTotalProfit(),
+            'requested_at' => $this->getRequestedAt(),
+            'processed_at' => $this->getProcessedAt(),
+            'wallet_origin' => $this->getWalletOrigin() ? $this->getWalletOrigin()->toArray() : [],
+            'wallet_destination' => $this->getWalletDestination() ? $this->getWalletDestination()->toArray() : [],
+            'observation' => $this->getObservation(),
+        ];
+    }
+
+    /**
      * @return Wallet
      */
     public function getWallet(): Wallet

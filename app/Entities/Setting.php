@@ -9,13 +9,25 @@ namespace App\Entities;
  *
  * @author Gabriel Anhaia <anhaia.gabriel@gmail.com>
  */
-class Setting
+class Setting extends AbstractEntity
 {
     /** @var string $name Name of the setting. */
     protected $name;
 
     /** @var mixed $value Value of the setting. */
     protected $value;
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'value' => $this->getValue()
+        ];
+    }
 
     /**
      * @return string

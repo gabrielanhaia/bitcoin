@@ -26,7 +26,7 @@ abstract class AbstractEntity
     /**
      * @return int|null
      */
-    protected function getId(): ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -35,9 +35,14 @@ abstract class AbstractEntity
      * @param int|null $id
      * @return AbstractEntity
      */
-    protected function setId(?int $id): AbstractEntity
+    public function setId(?int $id): AbstractEntity
     {
         $this->id = $id;
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    abstract public function toArray();
 }

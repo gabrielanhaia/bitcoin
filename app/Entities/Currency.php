@@ -16,6 +16,17 @@ class Currency  extends AbstractEntity
     protected $name;
 
     /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName()
+        ];
+    }
+
+    /**
      * @return string
      */
     public function getName(): string

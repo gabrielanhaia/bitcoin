@@ -20,6 +20,18 @@ class Wallet extends AbstractEntity
     protected $address;
 
     /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'address' => $this->getAddress()
+        ];
+    }
+
+    /**
      * @return string
      */
     public function getName(): string

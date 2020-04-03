@@ -26,6 +26,20 @@ class ExchangeRate extends AbstractEntity
     protected $bitcoinAmount;
 
     /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'currency' => $this->getCurrency() ? $this->getCurrency()->toArray() : [],
+            'datetime' => $this->getDatetime(),
+            'amount' => $this->getAmount(),
+            'bitcoin_amount' => $this->getBitcoinAmount()
+        ];
+    }
+
+    /**
      * @return Currency
      */
     public function getCurrency(): Currency
