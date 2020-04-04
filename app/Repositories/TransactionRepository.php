@@ -146,7 +146,8 @@ class TransactionRepository extends Repository
             ->update([
                 'status' => $transactionEntity->getStatus()->value(),
                 'balance' => $transactionEntity->getBalance(),
-                'processed_at' => $transactionEntity->getProcessedAt()
+                'processed_at' => $transactionEntity->getProcessedAt(),
+                'observation' => $transactionEntity->getObservation()
             ]);
     }
 
