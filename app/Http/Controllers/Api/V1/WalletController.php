@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Exceptions\Api\ForbiddenException;
+use App\Exceptions\Api\InternalServerErrorException;
+use BitWasp\Bitcoin\Exceptions\RandomBytesFailure;
 use App\Entities\{Wallet, User};
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\CreateWalletRequest;
@@ -32,6 +35,9 @@ class WalletController extends Controller
      * @param CreateWalletRequest $request
      *
      * @return WalletResource
+     * @throws ForbiddenException
+     * @throws InternalServerErrorException
+     * @throws RandomBytesFailure
      */
     public function create(Auth $auth, CreateWalletRequest $request)
     {

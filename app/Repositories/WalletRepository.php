@@ -3,7 +3,7 @@
 
 namespace App\Repositories;
 
-use App\Entities\Wallet as WalletEntity;
+use App\Entities\{Wallet as WalletEntity, User as UserEntity};
 use App\Exceptions\Api\InternalServerErrorException;
 use App\Models\Wallet;
 
@@ -63,5 +63,31 @@ class WalletRepository
             ->count();
 
         return (int) $totalWalletsByUser;
+    }
+
+    /**
+     * Search for a wallet with its wallet address.
+     *
+     * @param string $walletAddress Wallet address.
+     * @return WalletEntity|null
+     */
+    public function findWalletByAddress(string $walletAddress): ?WalletEntity
+    {
+        $walletResult = $this->walletModel
+            ->where('address', '=', $walletAddress)
+            ->first();
+
+        if (empty($walletResult)) {
+            return null;
+        }
+
+        $walletUserEntity = new UserEntity($walletResult->user_id);
+
+        $walletEntity = new WalletEntity($walletResult->id);
+        $walletEntity->setAddress($walletAddress)
+            ->setName($walletResult->name)
+            ->setUser($walletUserEntity);
+
+        return $walletEntity;
     }
 }

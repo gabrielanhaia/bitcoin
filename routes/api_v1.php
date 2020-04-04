@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,12 +16,19 @@ use Illuminate\Support\Facades\Route;
 Route::group([
     'prefix' => 'users',
 ], function ($router) {
-    Route::post('', 'UserController@create');
+    Route::post('', 'UserController@create')->name('users.create');
 });
 
 Route::group([
     'prefix' => 'wallets',
     'middleware' => ['auth:api']
 ], function ($router) {
-    Route::post('', 'WalletController@create');
+    Route::post('', 'WalletController@create')->name('wallets.create');
+});
+
+Route::group([
+    'prefix' => 'transactions',
+    'middleware' => ['auth:api']
+], function ($router) {
+    Route::post('', 'TransactionController@create')->name('transactions.create');
 });

@@ -76,7 +76,7 @@ class Transaction extends AbstractEntity
     /**
      * @return Wallet
      */
-    public function getWallet(): Wallet
+    public function getWallet(): ?Wallet
     {
         return $this->wallet;
     }
@@ -94,7 +94,7 @@ class Transaction extends AbstractEntity
     /**
      * @return int
      */
-    public function getBalance(): int
+    public function getBalance(): ?int
     {
         return $this->balance;
     }
@@ -112,7 +112,7 @@ class Transaction extends AbstractEntity
     /**
      * @return int
      */
-    public function getTotalTransaction(): int
+    public function getTotalTransaction(): ?int
     {
         return $this->totalTransaction;
     }
@@ -130,7 +130,7 @@ class Transaction extends AbstractEntity
     /**
      * @return float
      */
-    public function getProfitPercentage(): float
+    public function getProfitPercentage(): ?float
     {
         return $this->profitPercentage;
     }
@@ -148,7 +148,7 @@ class Transaction extends AbstractEntity
     /**
      * @return float
      */
-    public function getTotalProfit(): float
+    public function getTotalProfit(): ?float
     {
         return $this->totalProfit;
     }
@@ -166,7 +166,7 @@ class Transaction extends AbstractEntity
     /**
      * @return Carbon
      */
-    public function getRequestedAt(): Carbon
+    public function getRequestedAt(): ?Carbon
     {
         return $this->requestedAt;
     }
@@ -184,7 +184,7 @@ class Transaction extends AbstractEntity
     /**
      * @return Carbon
      */
-    public function getProcessedAt(): Carbon
+    public function getProcessedAt(): ?Carbon
     {
         return $this->processedAt;
     }
@@ -202,7 +202,7 @@ class Transaction extends AbstractEntity
     /**
      * @return Wallet
      */
-    public function getWalletOrigin(): Wallet
+    public function getWalletOrigin(): ?Wallet
     {
         return $this->walletOrigin;
     }
@@ -220,7 +220,7 @@ class Transaction extends AbstractEntity
     /**
      * @return Wallet
      */
-    public function getWalletDestination(): Wallet
+    public function getWalletDestination(): ?Wallet
     {
         return $this->walletDestination;
     }
@@ -238,7 +238,7 @@ class Transaction extends AbstractEntity
     /**
      * @return string
      */
-    public function getObservation(): string
+    public function getObservation(): ?string
     {
         return $this->observation;
     }
@@ -256,7 +256,7 @@ class Transaction extends AbstractEntity
     /**
      * @return TransactionStatusEnum
      */
-    public function getStatus(): TransactionStatusEnum
+    public function getStatus(): ?TransactionStatusEnum
     {
         return $this->status;
     }
@@ -274,7 +274,7 @@ class Transaction extends AbstractEntity
     /**
      * @return TransactionTypeEnum
      */
-    public function getType(): TransactionTypeEnum
+    public function getType(): ?TransactionTypeEnum
     {
         return $this->type;
     }

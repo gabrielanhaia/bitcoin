@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Entities\Wallet as WalletEntity;
 use App\Exceptions\Api\ForbiddenException;
+use App\Models\Wallet;
 use App\Repositories\WalletRepository;
 use BitWasp\Bitcoin\{Address\Address,
     Address\AddressCreator,
@@ -90,5 +91,19 @@ class WalletService
         $address = $addrCreator->fromOutputScript($scriptPubKey);
 
         return $address;
+    }
+
+    /**
+     * Search for a wallet with its wallet address.
+     *
+     * @param string $walletAddress Wallet address.
+     * @return WalletEntity
+     */
+    public function findWalletByAddress(string $walletAddress): WalletEntity
+    {
+        $walletEntity = $this->walletRepository
+            ->findWalletByAddress($walletAddress);
+
+        return $walletEntity;
     }
 }
