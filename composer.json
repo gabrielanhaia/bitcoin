@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.2.5",
         "bitwasp/bitcoin": "^1.0",
+        "doctrine/dbal": "^2.10",
         "eloquent/enumeration": "^6.0",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
