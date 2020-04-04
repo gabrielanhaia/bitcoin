@@ -179,23 +179,23 @@ class TransactionRepository extends Repository
      * List all the transactions by user.
      * It can be filtered by wallet_id.
      *
-     * @param UserEntity $user User to be filtered.
-     * @param WalletEntity $wallet Wallet to be filtered.
+     * @param int $userId User id to be filtered.
+     * @param int $walletId Wallet id to be filtered.
      * @return \Illuminate\Support\Collection|TransactionEntity[]
      */
     public function listTransactions(
-        UserEntity $user,
-        WalletEntity $wallet = null
+        int $userId,
+        int $walletId = null
     )
     {
         $transactionsQuery = $this->transactionModel
             ->select('transactions.*')
-            ->where('wallets.user_id', '=', $user->getId())
+            ->where('wallets.user_id', '=', $userId)
             ->join('wallets', 'wallets.id', '=', 'transactions.wallet_id')
             ->orderBy('transactions.created_at', 'DESC');
 
-        if (!empty($wallet)) {
-            $transactionsQuery->where('wallets.id', '=', $wallet->getId());
+        if (!empty($walletId)) {
+            $transactionsQuery->where('wallets.id', '=', $walletId);
         }
 
         $transactions = $transactionsQuery->get();

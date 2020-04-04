@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Api\V1;
 use App\Entities\Enums\TransactionTypeEnum;
 use App\Entities\Transaction as TransactionEntity;
 use App\Exceptions\Api\NotFoundException;
-use App\Exceptions\Api\UnauthorizedException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\CreateTransactionRequest;
 use App\Http\Resources\V1\Transaction as TransactionResource;
+use App\Http\Resources\V1\TransactionCollection;
 use App\Services\TransactionService;
 use App\Services\WalletService;
 use Illuminate\Support\Facades\Auth;
@@ -74,16 +74,31 @@ class TransactionController extends Controller
     }
 
     /**
-     * Method responsible for listing all the transactions in a wallet.
+     * Method responsible for listing all the transactions related to a wallet.
      *
      * @param string $walletAddress Wallet address to search for the transaction.
-     * @return TransactionEntity[]|\Illuminate\Support\Collection
+     * @return TransactionCollection
      * @throws NotFoundException
      */
     public function listTransactionsByWallet(string $walletAddress)
     {
         $transactions = $this->transactionService->listTransactionsByWallet($walletAddress);
 
-        return $transactions;
+        return new TransactionCollection($transactions);
+    }
+
+    /**
+     * Method responsible for listing all the transactions related to a user (all wallets).
+     *
+     * @param Auth $auth
+     * @return TransactionCollection
+     */
+    public function listTransaction(Auth $auth)
+    {
+        $userId = $auth::user()->id;
+
+        $transactions = $this->transactionService->listTransactionsByUser($userId);
+
+        return new TransactionCollection($transactions);
     }
 }

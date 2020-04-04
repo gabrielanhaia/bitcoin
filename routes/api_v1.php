@@ -33,4 +33,5 @@ Route::group([
     'middleware' => ['auth:api']
 ], function ($router) {
     Route::post('', 'TransactionController@makeTransfer')->name('transactions.create');
+    Route::get('', 'TransactionController@listTransaction')->name('transactions.list');
 });

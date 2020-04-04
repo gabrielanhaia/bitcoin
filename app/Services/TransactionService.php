@@ -4,18 +4,15 @@
 namespace App\Services;
 
 use App\Entities\Wallet as WalletEntity;
-use App\Exceptions\Api\NotFoundException;
-use App\Exceptions\Transaction\InsufficientFoundsException;
-use App\Exceptions\Transaction\TransactionAlreadyProcessedException;
-use App\Exceptions\Transaction\TransactionNotFoundException;
-use App\Http\Resources\V1\TransactionCollection;
+use App\Exceptions\{Api\NotFoundException,
+    Transaction\InsufficientFoundsException,
+    Transaction\TransactionAlreadyProcessedException,
+    Transaction\TransactionNotFoundException};
 use App\Jobs\TransactionProcessor;
-use App\Repositories\SettingRepository;
-use App\Repositories\WalletRepository;
-use Illuminate\Support\Facades\Auth;
+use App\Repositories\{SettingRepository, WalletRepository, TransactionRepository, UserRepository};
+use Illuminate\Support\{Collection, Facades\Auth};
 use App\Entities\Enums\{TransactionStatusEnum, TransactionTypeEnum};
 use App\Entities\Transaction as TransactionEntity;
-use App\Repositories\TransactionRepository;
 use Carbon\Carbon;
 
 /**
@@ -35,21 +32,27 @@ class TransactionService
     /** @var WalletRepository $walletRepository Repository of wallets. */
     private $walletRepository;
 
+    /** @var UserRepository $userRepository Repository of users. */
+    private $userRepository;
+
     /**
      * TransactionService constructor.
      * @param TransactionRepository $transactionRepository
      * @param SettingRepository $settingRepository
      * @param WalletRepository $walletRepository
+     * @param UserRepository $userRepository
      */
     public function __construct(
         TransactionRepository $transactionRepository,
         SettingRepository $settingRepository,
-        WalletRepository $walletRepository
+        WalletRepository $walletRepository,
+        UserRepository $userRepository
     )
     {
         $this->transactionRepository = $transactionRepository;
         $this->settingRepository = $settingRepository;
         $this->walletRepository = $walletRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -192,7 +195,7 @@ class TransactionService
      * List all the transactions in a wallet (by wallet address).
      *
      * @param string $walletAddress Address to search the transactions.
-     * @return TransactionCollection
+     * @return TransactionEntity[]|Collection
      * @throws NotFoundException
      */
     public function listTransactionsByWallet(string $walletAddress)
@@ -206,8 +209,24 @@ class TransactionService
             throw new NotFoundException('Wallet not found.');
         }
 
-        $transactions =  $this->transactionRepository->listTransactions($wallet->getUser());
+        $transactions = $this->transactionRepository->listTransactions(
+            $wallet->getUser()->getId(),
+            $wallet->getId()
+        );
 
-        return new TransactionCollection($transactions);
+        return $transactions;
+    }
+
+    /**
+     * Return a list of transactions by user.
+     *
+     * @param int $userId User identifier to search the transactions.
+     * @return TransactionEntity[]|Collection
+     */
+    public function listTransactionsByUser(int $userId)
+    {
+        $transactions = $this->transactionRepository->listTransactions($userId);
+
+        return $transactions;
     }
 }
