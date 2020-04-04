@@ -27,8 +27,11 @@ class Transaction extends AbstractEntity
     /** @var integer $balance Total of bitcoins at the moment of the transaction. */
     protected $balance;
 
-    /** @var integer $totalTransaction Total amount of the transaction. */
-    protected $totalTransaction;
+    /** @var integer $grossValue Total amount of the transaction (Gross). */
+    protected $grossValue;
+
+    /** @var integer $netValue Total amount of the transaction (Net). */
+    protected $netValue;
 
     /** @var float $profitPercentage Percentage of the profit in this transaction. */
     protected $profitPercentage;
@@ -62,7 +65,8 @@ class Transaction extends AbstractEntity
             'type' => $this->getType() ? $this->getType()->value() : '',
             'status' => $this->getStatus() ? $this->getStatus()->value() : '',
             'balance' => $this->getBalance(),
-            'total_transaction' => $this->getTotalTransaction(),
+            'gross_value' => $this->getGrossValue(),
+            'net_value' => $this->getNetValue(),
             'profit_percentage' => $this->getProfitPercentage(),
             'total_profit' => $this->getTotalProfit(),
             'requested_at' => $this->getRequestedAt(),
@@ -71,6 +75,42 @@ class Transaction extends AbstractEntity
             'wallet_destination' => $this->getWalletDestination() ? $this->getWalletDestination()->toArray() : [],
             'observation' => $this->getObservation(),
         ];
+    }
+
+    /**
+     * @return int
+     */
+    public function getGrossValue(): int
+    {
+        return (int) $this->grossValue;
+    }
+
+    /**
+     * @param int $grossValue
+     * @return Transaction
+     */
+    public function setGrossValue(int $grossValue): Transaction
+    {
+        $this->grossValue = $grossValue;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNetValue(): int
+    {
+        return (int) $this->netValue;
+    }
+
+    /**
+     * @param int $netValue
+     * @return Transaction
+     */
+    public function setNetValue(int $netValue): Transaction
+    {
+        $this->netValue = $netValue;
+        return $this;
     }
 
     /**
@@ -106,24 +146,6 @@ class Transaction extends AbstractEntity
     public function setBalance(int $balance): Transaction
     {
         $this->balance = $balance;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTotalTransaction(): ?int
-    {
-        return $this->totalTransaction;
-    }
-
-    /**
-     * @param int $totalTransaction
-     * @return Transaction
-     */
-    public function setTotalTransaction(int $totalTransaction): Transaction
-    {
-        $this->totalTransaction = $totalTransaction;
         return $this;
     }
 
