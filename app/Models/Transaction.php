@@ -31,6 +31,8 @@ class Transaction extends Model
     /** @var array $dates Date fields. */
     protected $dates = [
         'requested_at',
-        'processed_at'
+        'processed_at',
+        'created_at',
+        'updated_at'
     ];
 }
