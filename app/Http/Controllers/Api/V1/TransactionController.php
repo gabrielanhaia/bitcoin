@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Entities\Enums\TransactionTypeEnum;
 use App\Entities\Transaction as TransactionEntity;
+use App\Exceptions\Api\NotFoundException;
+use App\Exceptions\Api\UnauthorizedException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\CreateTransactionRequest;
 use App\Http\Resources\V1\Transaction as TransactionResource;
@@ -45,14 +48,27 @@ class TransactionController extends Controller
      * @param CreateTransactionRequest $request
      * @param Auth $auth
      * @return TransactionResource
+     * @throws NotFoundException
      */
-    public function create(CreateTransactionRequest $request, Auth $auth): TransactionResource
+    public function makeTransfer(CreateTransactionRequest $request, Auth $auth): TransactionResource
     {
+        $wallet = $this->walletService->findWalletByAddress($request->post('address'));
+        $walletDestination = $this->walletService->findWalletByAddress($request->post('address_destination'));
+        $totalTransaction = $request->post('total_transaction');
+
         $userId = $auth::user()->id;
-        $wallet = $this->walletService->findWalletByAddress($request->get('address'));
+        if ($userId === $wallet->getUser()->getId()) {
+            throw new NotFoundException('Wallet not found.');
+        }
 
         $transactionEntity = new TransactionEntity;
-        $transactionEntity->setWallet($wallet);
+        $transactionEntity->setWallet($wallet)
+            ->setType(TransactionTypeEnum::TRANSFER())
+            ->setWalletOrigin($wallet)
+            ->setWalletDestination($walletDestination)
+            ->setGrossValue($totalTransaction);
+
+        $this->transactionService->makeTransfer($transactionEntity);
 
         return new TransactionResource($transactionEntity);
     }

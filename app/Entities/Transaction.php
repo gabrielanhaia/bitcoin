@@ -260,9 +260,9 @@ class Transaction extends AbstractEntity
     /**
      * @return string
      */
-    public function getObservation(): ?string
+    public function getObservation(): string
     {
-        return $this->observation;
+        return (string) $this->observation;
     }
 
     /**

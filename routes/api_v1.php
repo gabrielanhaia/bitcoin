@@ -30,5 +30,5 @@ Route::group([
     'prefix' => 'transactions',
     'middleware' => ['auth:api']
 ], function ($router) {
-    Route::post('', 'TransactionController@create')->name('transactions.create');
+    Route::post('', 'TransactionController@makeTransfer')->name('transactions.create');
 });

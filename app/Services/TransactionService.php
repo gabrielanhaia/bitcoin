@@ -3,8 +3,11 @@
 
 namespace App\Services;
 
+use App\Entities\Enums\TransactionStatusEnum;
+use App\Entities\Enums\TransactionTypeEnum;
 use App\Entities\Transaction as TransactionEntity;
 use App\Repositories\TransactionRepository;
+use Carbon\Carbon;
 
 /**
  * Class TransactionService
@@ -27,12 +30,30 @@ class TransactionService
     }
 
     /**
-     * Method responsible for creating a new transaction.
+     * Method responsible for creating a new transaction (Transfer).
      *
      * @param TransactionEntity $transactionEntity Transaction to be created.
      */
-    public function createTransaction(TransactionEntity $transactionEntity)
+    public function makeTransfer(TransactionEntity $transactionEntity)
     {
+        $profitPercentage = 0;
+        $totalProfit = 0;
+        $netValue = $transactionEntity->getGrossValue();
+
+        if ($transactionEntity->getWalletOrigin()->getUser()->getId()
+            || $transactionEntity->getWalletDestination()->getUser()->getId()) {
+            // TODO: Change to load from settings.
+            $profitPercentage = 1.5;
+            $totalProfit = ($transactionEntity->getGrossValue() / 100) * $profitPercentage;
+        }
+
+        $transactionEntity->setStatus(TransactionStatusEnum::PENDING())
+            ->setNetValue($netValue)
+            ->setTotalProfit($totalProfit)
+            ->setProfitPercentage($profitPercentage)
+            ->setType(TransactionTypeEnum::TRANSFER())
+            ->setRequestedAt(Carbon::now());
+
         $this->transactionRepository->createTransaction($transactionEntity);
     }
 }

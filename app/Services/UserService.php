@@ -35,6 +35,7 @@ class UserService
      * @return UserEntity
      * @throws ConflictException
      * @throws InternalServerErrorException
+     * @throws \App\Exceptions\Api\UnprocessableEntityException
      */
     public function createUser(UserEntity $userEntity): UserEntity
     {

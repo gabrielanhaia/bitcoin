@@ -46,8 +46,8 @@ class UserController extends Controller
             ->setEmail($request->post('email'))
             ->setPassword($request->post('password'));
 
-        $createdUser = $this->userService->createUser($userEntity);
+        $this->userService->createUser($userEntity);
 
-        return new UserResource($createdUser);
+        return new UserResource($userEntity);
     }
 }

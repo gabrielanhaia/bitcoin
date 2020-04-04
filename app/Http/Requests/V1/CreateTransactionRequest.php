@@ -30,7 +30,9 @@ class CreateTransactionRequest extends FormRequest
     public function rules()
     {
         return [
-            'address' => 'required|string'
+            'address' => 'required|string',
+            'address_destination' => 'required|string',
+            'total_transaction' => 'required|numeric'
         ];
     }
 }
