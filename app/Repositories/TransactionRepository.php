@@ -50,8 +50,12 @@ class TransactionRepository extends Repository
             'profit_percentage' => $transactionEntity->getProfitPercentage(),
             'total_profit' => $transactionEntity->getTotalProfit(),
             'requested_at' => $transactionEntity->getRequestedAt(),
-            'wallet_id_origin' => $transactionEntity->getWalletOrigin()->getId(),
-            'wallet_id_destination' => $transactionEntity->getWalletDestination()->getId()
+            'wallet_id_origin' => $transactionEntity->getWalletOrigin()
+                ? $transactionEntity->getWalletOrigin()->getId()
+                : null,
+            'wallet_id_destination' => $transactionEntity->getWalletDestination()
+                ? $transactionEntity->getWalletDestination()->getId()
+                : null
         ];
 
         if ($transactionEntity->getBalance() !== null) {
@@ -79,7 +83,7 @@ class TransactionRepository extends Repository
             ->select('transactions.balance')
             ->where('transactions.wallet_id', '=', $walletId)
             ->where('transactions.status', '=', TransactionStatusEnum::PROCESSED)
-            ->orderBy('transactions.id', 'DESC')
+            ->orderBy('transactions.processed_at', 'DESC')
             ->limit(1)
             ->first();
 

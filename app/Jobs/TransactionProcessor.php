@@ -44,6 +44,6 @@ class TransactionProcessor implements ShouldQueue
      */
     public function handle(TransactionService $transactionService)
     {
-        $transactionService->processTransaction($this->transactionEntity);
+        $transactionService->processTransactionTransfer($this->transactionEntity);
     }
 }

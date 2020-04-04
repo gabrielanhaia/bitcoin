@@ -24,13 +24,18 @@ class WalletService
     /** @var WalletRepository $walletRepository Repository of wallets. */
     private $walletRepository;
 
+    /** @var TransactionService $transactionService Service of transactions. */
+    private $transactionService;
+
     /**
      * UserService constructor.
      * @param WalletRepository $walletRepository
+     * @param TransactionService $transactionService
      */
-    public function __construct(WalletRepository $walletRepository)
+    public function __construct(WalletRepository $walletRepository, TransactionService $transactionService)
     {
         $this->walletRepository = $walletRepository;
+        $this->transactionService = $transactionService;
     }
 
     /**
@@ -63,12 +68,10 @@ class WalletService
         $this->walletRepository
             ->createWallet($walletEntity);
 
-        $totalBitCoins = 0;
         if ($totalWalletsUser === 0) {
             $totalBitCoins = 100000000;
+            $this->transactionService->creditAmount($walletEntity, $totalBitCoins);
         }
-
-        // TODO: Insert bitcoins in the first wallet.
 
         return $walletEntity;
     }

@@ -3,6 +3,7 @@
 
 namespace App\Services;
 
+use App\Entities\Wallet as WalletEntity;
 use App\Exceptions\Transaction\InsufficientFoundsException;
 use App\Exceptions\Transaction\TransactionAlreadyProcessedException;
 use App\Exceptions\Transaction\TransactionNotFoundException;
@@ -53,15 +54,15 @@ class TransactionService
         $netValue = $transactionEntity->getGrossValue();
 
         if ($transactionEntity->getWalletOrigin()->getUser()->getId()
-            || $transactionEntity->getWalletDestination()->getUser()->getId()) {
-
+            !== $transactionEntity->getWalletDestination()->getUser()->getId()
+        ) {
             $settingProfitPercentage = $this->settingRepository->getSetting('profit_transfers');
 
             if ($settingProfitPercentage !== null) {
                 $profitPercentage = $settingProfitPercentage->getValue();
                 $totalProfit = ($transactionEntity->getGrossValue() / 100) * $profitPercentage;
                 $totalProfit = round($totalProfit);
-                $netValue = $transactionEntity->getGrossValue() - $totalProfit;
+                $netValue = ($transactionEntity->getGrossValue() - $totalProfit);
             }
         }
 
@@ -95,7 +96,7 @@ class TransactionService
      * @throws TransactionAlreadyProcessedException Exception throw where transaction had been already processed.
      * @throws InsufficientFoundsException Exception throw where there isn't enough bitcoins in this wallet.
      */
-    public function processTransaction(TransactionEntity $transactionEntity)
+    public function processTransactionTransfer(TransactionEntity $transactionEntity)
     {
         $currentStateTransaction = $this->transactionRepository->find($transactionEntity->getId());
 
@@ -149,5 +150,31 @@ class TransactionService
         $this->transactionRepository->createTransaction($transactionDestination);
 
         $this->transactionRepository->commitTransaction();
+    }
+
+    /**
+     * Method responsible for credit bitcoins in an account.
+     *
+     * @param WalletEntity $walletEntity Wallet to insert the bitcoins.
+     * @param int $totalBitCoins Amount of bitcoins to be credited.
+     */
+    public function creditAmount(WalletEntity $walletEntity, int $totalBitCoins)
+    {
+        $lastTotalBalanceWallet = $this->transactionRepository
+            ->getLastTotalBalanceByWallet($walletEntity->getId());
+
+        $newTotalBalanceWallet = ($lastTotalBalanceWallet + $totalBitCoins);
+
+        $transaction = new TransactionEntity;
+        $transaction->setWallet($walletEntity)
+            ->setBalance($newTotalBalanceWallet)
+            ->setRequestedAt(Carbon::now())
+            ->setProcessedAt(Carbon::now())
+            ->setGrossValue($totalBitCoins)
+            ->setNetValue($totalBitCoins)
+            ->setType(TransactionTypeEnum::CREDIT())
+            ->setStatus(TransactionStatusEnum::PROCESSED());
+
+        $this->transactionRepository->createTransaction($transaction);
     }
 }

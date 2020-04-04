@@ -57,7 +57,7 @@ class TransactionController extends Controller
         $totalTransaction = $request->post('total_transaction');
 
         $userId = $auth::user()->id;
-        if ($userId === $wallet->getUser()->getId()) {
+        if ($userId !== $wallet->getUser()->getId()) {
             throw new NotFoundException('Wallet not found.');
         }
 

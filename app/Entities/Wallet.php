@@ -65,7 +65,7 @@ class Wallet extends AbstractEntity
      * @param string $name
      * @return Wallet
      */
-    public function setName(string $name): Wallet
+    public function setName(string $name = null): Wallet
     {
         $this->name = $name;
         return $this;
