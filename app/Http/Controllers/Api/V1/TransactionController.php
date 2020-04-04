@@ -63,7 +63,7 @@ class TransactionController extends Controller
 
         $transactionEntity = new TransactionEntity;
         $transactionEntity->setWallet($wallet)
-            ->setType(TransactionTypeEnum::TRANSFER())
+            ->setType(TransactionTypeEnum::TRANSFER_DEBIT())
             ->setWalletOrigin($wallet)
             ->setWalletDestination($walletDestination)
             ->setGrossValue($totalTransaction);

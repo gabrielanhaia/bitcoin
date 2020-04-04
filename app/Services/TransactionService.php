@@ -70,7 +70,7 @@ class TransactionService
             ->setNetValue($netValue)
             ->setTotalProfit($totalProfit)
             ->setProfitPercentage($profitPercentage)
-            ->setType(TransactionTypeEnum::TRANSFER())
+            ->setType(TransactionTypeEnum::TRANSFER_DEBIT())
             ->setRequestedAt(Carbon::now());
 
         $this->transactionRepository->createTransaction($transactionEntity);
@@ -144,7 +144,7 @@ class TransactionService
             ->setProcessedAt(Carbon::now())
             ->setGrossValue($currentStateTransaction->getNetValue())
             ->setNetValue($currentStateTransaction->getNetValue())
-            ->setType(TransactionTypeEnum::TRANSFER())
+            ->setType(TransactionTypeEnum::TRANSFER_CREDIT())
             ->setStatus(TransactionStatusEnum::PROCESSED());
 
         $this->transactionRepository->createTransaction($transactionDestination);
