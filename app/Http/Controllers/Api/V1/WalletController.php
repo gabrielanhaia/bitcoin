@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Exceptions\Api\ForbiddenException;
 use App\Exceptions\Api\InternalServerErrorException;
+use App\Exceptions\Api\NotFoundException;
+use App\Repositories\TransactionRepository;
 use BitWasp\Bitcoin\Exceptions\RandomBytesFailure;
 use App\Entities\{Wallet, User};
 use App\Http\Controllers\Controller;
@@ -23,9 +25,19 @@ class WalletController extends Controller
     /** @var WalletService $walletService Service of wallets. */
     private $walletService;
 
-    public function __construct(WalletService $walletService)
+    /** @var TransactionRepository $transactionRepository Repository of transactions. */
+    private $transactionRepository;
+
+    /**
+     * WalletController constructor.
+     *
+     * @param WalletService $walletService
+     * @param TransactionRepository $transactionRepository
+     */
+    public function __construct(WalletService $walletService, TransactionRepository $transactionRepository)
     {
         $this->walletService = $walletService;
+        $this->transactionRepository = $transactionRepository;
     }
 
     /**
@@ -39,7 +51,7 @@ class WalletController extends Controller
      * @throws InternalServerErrorException
      * @throws RandomBytesFailure
      */
-    public function create(Auth $auth, CreateWalletRequest $request)
+    public function createWallet(Auth $auth, CreateWalletRequest $request)
     {
         $walletName = $request->get('name', '');
         $user = new User($auth::id());
@@ -51,5 +63,27 @@ class WalletController extends Controller
         $this->walletService->createWallet($wallet);
 
         return new WalletResource($wallet);
+    }
+
+    /**
+     * Method responsible for return a wallet.
+     *
+     * @param string $walletAddress
+     * @return WalletResource
+     * @throws NotFoundException
+     */
+    public function getWallet(string $walletAddress)
+    {
+        $wallet = $this->walletService->findWalletByAddress($walletAddress);
+
+        if (empty($wallet)) {
+            throw new NotFoundException('Wallet not found.');
+        }
+
+        $extraInformation = [
+            'balance_bitcoin' => $this->transactionRepository->getLastTotalBalanceByWallet($wallet->getId())
+        ];
+
+        return new WalletResource($wallet, $extraInformation);
     }
 }

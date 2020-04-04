@@ -23,7 +23,11 @@ Route::group([
     'prefix' => 'wallets',
     'middleware' => ['auth:api']
 ], function ($router) {
-    Route::post('', 'WalletController@create')->name('wallets.create');
+    Route::post('', 'WalletController@createWallet')->name('wallets.create');
+
+    Route::get('{wallet_address}', 'WalletController@getWallet')
+        ->name('wallets.get');
+
     Route::get('{wallet_address}/transactions', 'TransactionController@listTransactionsByWallet')
         ->name('wallets.list.transactions');
 });
