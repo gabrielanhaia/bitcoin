@@ -13,8 +13,11 @@ use Eloquent\Enumeration\AbstractEnumeration;
  */
 class TransactionTypeEnum extends AbstractEnumeration
 {
-    /** @var string TRANSFER Status of transactions for transfers between accounts. */
-    const TRANSFER = 'TRANSFER';
+    /** @var string TRANSFER_CREDIT Status of transactions for transfers between accounts (credit). */
+    const TRANSFER_CREDIT = 'TRANSFER_CREDIT';
+
+    /** @var string TRANSFER_DEBIT Status of transactions for transfers between accounts (debit). */
+    const TRANSFER_DEBIT = 'TRANSFER_DEBIT';
 
     /** @var string DEBIT Status of transactions for debit (cash money). */
     const DEBIT = 'DEBIT';
