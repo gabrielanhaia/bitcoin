@@ -44,6 +44,7 @@ return [
         'api' => [
             'driver' => 'token',
             'provider' => 'users',
+            // TODO: Enable hash.
             'hash' => false,
         ],
     ],

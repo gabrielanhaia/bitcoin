@@ -86,7 +86,8 @@ class HttpStatusCodeEnum extends AbstractEnumeration
         self::METHOD_NOT_ALLOWED => 'Method not allowed.',
         self::LOCKED => 'Locked.',
         self::GONE => 'Gone.',
-        self::NOT_IMPLEMENTED => 'Not implemented.'
+        self::NOT_IMPLEMENTED => 'Not implemented.',
+        self::FORBIDDEN => 'Forbidden.'
     ];
 
     /**

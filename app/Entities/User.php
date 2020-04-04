@@ -40,7 +40,7 @@ class User extends AbstractEntity
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -58,7 +58,7 @@ class User extends AbstractEntity
     /**
      * @return string
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -76,7 +76,7 @@ class User extends AbstractEntity
     /**
      * @return string
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -94,7 +94,7 @@ class User extends AbstractEntity
     /**
      * @return string
      */
-    public function getApiToken(): string
+    public function getApiToken(): ?string
     {
         return $this->apiToken;
     }

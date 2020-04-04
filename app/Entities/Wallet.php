@@ -19,6 +19,9 @@ class Wallet extends AbstractEntity
     /** @var string $address Address of the wallet (hash). */
     protected $address;
 
+    /** @var User $user User who owns the wallet. */
+    protected $user;
+
     /**
      * @return array
      */
@@ -27,14 +30,33 @@ class Wallet extends AbstractEntity
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
-            'address' => $this->getAddress()
+            'address' => $this->getAddress(),
+            'user' => $this->getUser() ? $this->getUser()->toArray() : null
         ];
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     * @return Wallet
+     */
+    public function setUser(User $user): Wallet
+    {
+        $this->user = $user;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -52,7 +74,7 @@ class Wallet extends AbstractEntity
     /**
      * @return string
      */
-    public function getAddress(): string
+    public function getAddress(): ?string
     {
         return $this->address;
     }

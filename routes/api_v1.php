@@ -19,3 +19,10 @@ Route::group([
 ], function ($router) {
     Route::post('', 'UserController@create');
 });
+
+Route::group([
+    'prefix' => 'wallets',
+    'middleware' => ['auth:api']
+], function ($router) {
+    Route::post('', 'WalletController@create');
+});

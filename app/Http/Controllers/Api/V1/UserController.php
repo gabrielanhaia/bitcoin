@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Entities\User;
+use App\Exceptions\Api\ConflictException;
+use App\Exceptions\Api\InternalServerErrorException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\CreateUserRequest;
 use App\Http\Resources\V1\User as UserResource;
@@ -34,6 +36,8 @@ class UserController extends Controller
      *
      * @param CreateUserRequest $request Request object with the required fields to create a new user.
      * @return UserResource
+     * @throws ConflictException
+     * @throws InternalServerErrorException
      */
     public function create(CreateUserRequest $request)
     {

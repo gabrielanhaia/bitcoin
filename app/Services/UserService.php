@@ -29,19 +29,6 @@ class UserService
     }
 
     /**
-     * Try to find an user by its Id.
-     *
-     * @param int $userId User identifier to be searched.
-     * @return UserEntity
-     */
-    public function find(int $userId): ?UserEntity
-    {
-        $userEntity = $this->userRepository->find($userId);
-
-        return $userEntity;
-    }
-
-    /**
      * Method responsible for creating a new user.
      *
      * @param UserEntity $userEntity Entity for the user to be created.
