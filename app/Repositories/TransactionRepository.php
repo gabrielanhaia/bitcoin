@@ -3,9 +3,11 @@
 
 namespace App\Repositories;
 
-use App\Entities\Enums\TransactionStatusEnum;
-use App\Entities\Enums\TransactionTypeEnum;
-use App\Entities\Transaction as TransactionEntity;
+use App\Entities\{Enums\TransactionStatusEnum,
+    Enums\TransactionTypeEnum,
+    Transaction as TransactionEntity,
+    Wallet as WalletEntity,
+    User as UserEntity};
 use App\Models\Transaction;
 use Carbon\Carbon;
 
@@ -171,5 +173,58 @@ class TransactionRepository extends Repository
         }
 
         $transactionResult->save();
+    }
+
+    /**
+     * List all the transactions by user.
+     * It can be filtered by wallet_id.
+     *
+     * @param UserEntity $user User to be filtered.
+     * @param WalletEntity $wallet Wallet to be filtered.
+     * @return \Illuminate\Support\Collection|TransactionEntity[]
+     */
+    public function listTransactions(
+        UserEntity $user,
+        WalletEntity $wallet = null
+    )
+    {
+        $transactionsQuery = $this->transactionModel
+            ->select('transactions.*')
+            ->where('wallets.user_id', '=', $user->getId())
+            ->join('wallets', 'wallets.id', '=', 'transactions.wallet_id')
+            ->orderBy('transactions.created_at', 'DESC');
+
+        if (!empty($wallet)) {
+            $transactionsQuery->where('wallets.id', '=', $wallet->getId());
+        }
+
+        $transactions = $transactionsQuery->get();
+
+        $transactionsResult = [];
+        foreach ($transactions as $transaction) {
+            $newTransactionResult = (new TransactionEntity($transaction->id))
+                ->setWallet($this->walletRepository->find($transaction->wallet_id))
+                ->setType(TransactionTypeEnum::memberByValue($transaction->type))
+                ->setStatus(TransactionStatusEnum::memberByValue($transaction->status))
+                ->setBalance($transaction->balance)
+                ->setGrossValue($transaction->gross_value)
+                ->setNetValue($transaction->net_value)
+                ->setProfitPercentage($transaction->profit_percentage)
+                ->setTotalProfit($transaction->total_profit)
+                ->setRequestedAt(Carbon::createFromFormat('Y-m-d H:i:s', $transaction->requested_at))
+                ->setObservation($transaction->observation);
+
+            if (!empty($transaction->wallet_origin_id)) {
+                $newTransactionResult->setWalletOrigin($this->walletRepository->find($transaction->wallet_origin_id));
+            }
+
+            if (!empty($transaction->wallet_destination_id)) {
+                $newTransactionResult->setWalletDestination($this->walletRepository->find($transaction->wallet_destination_id));
+            }
+
+            $transactionsResult[] = $newTransactionResult;
+        }
+
+        return collect($transactionsResult);
     }
 }

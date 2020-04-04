@@ -158,10 +158,10 @@ class Transaction extends AbstractEntity
     }
 
     /**
-     * @param float $profitPercentage
+     * @param float $profitPercentage|null
      * @return Transaction
      */
-    public function setProfitPercentage(float $profitPercentage): Transaction
+    public function setProfitPercentage(float $profitPercentage = null): Transaction
     {
         $this->profitPercentage = $profitPercentage;
         return $this;
@@ -176,10 +176,10 @@ class Transaction extends AbstractEntity
     }
 
     /**
-     * @param float $totalProfit
+     * @param float $totalProfit|null
      * @return Transaction
      */
-    public function setTotalProfit(float $totalProfit): Transaction
+    public function setTotalProfit(float $totalProfit = null): Transaction
     {
         $this->totalProfit = $totalProfit;
         return $this;

@@ -24,6 +24,8 @@ Route::group([
     'middleware' => ['auth:api']
 ], function ($router) {
     Route::post('', 'WalletController@create')->name('wallets.create');
+    Route::get('{wallet_address}/transactions', 'TransactionController@listTransactionsByWallet')
+        ->name('wallets.list.transactions');
 });
 
 Route::group([

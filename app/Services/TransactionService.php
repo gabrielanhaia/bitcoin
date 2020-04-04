@@ -4,11 +4,15 @@
 namespace App\Services;
 
 use App\Entities\Wallet as WalletEntity;
+use App\Exceptions\Api\NotFoundException;
 use App\Exceptions\Transaction\InsufficientFoundsException;
 use App\Exceptions\Transaction\TransactionAlreadyProcessedException;
 use App\Exceptions\Transaction\TransactionNotFoundException;
+use App\Http\Resources\V1\TransactionCollection;
 use App\Jobs\TransactionProcessor;
 use App\Repositories\SettingRepository;
+use App\Repositories\WalletRepository;
+use Illuminate\Support\Facades\Auth;
 use App\Entities\Enums\{TransactionStatusEnum, TransactionTypeEnum};
 use App\Entities\Transaction as TransactionEntity;
 use App\Repositories\TransactionRepository;
@@ -28,18 +32,24 @@ class TransactionService
     /** @var SettingRepository $settingRepository Repository of settings. */
     private $settingRepository;
 
+    /** @var WalletRepository $walletRepository Repository of wallets. */
+    private $walletRepository;
+
     /**
      * TransactionService constructor.
      * @param TransactionRepository $transactionRepository
      * @param SettingRepository $settingRepository
+     * @param WalletRepository $walletRepository
      */
     public function __construct(
         TransactionRepository $transactionRepository,
-        SettingRepository $settingRepository
+        SettingRepository $settingRepository,
+        WalletRepository $walletRepository
     )
     {
         $this->transactionRepository = $transactionRepository;
         $this->settingRepository = $settingRepository;
+        $this->walletRepository = $walletRepository;
     }
 
     /**
@@ -176,5 +186,28 @@ class TransactionService
             ->setStatus(TransactionStatusEnum::PROCESSED());
 
         $this->transactionRepository->createTransaction($transaction);
+    }
+
+    /**
+     * List all the transactions in a wallet (by wallet address).
+     *
+     * @param string $walletAddress Address to search the transactions.
+     * @return TransactionCollection
+     * @throws NotFoundException
+     */
+    public function listTransactionsByWallet(string $walletAddress)
+    {
+        $userId = Auth::user()->id;
+        $wallet = $this->walletRepository->findWalletByAddress($walletAddress);
+
+        if (empty($wallet)
+            || ($wallet->getUser()->getId() !== $userId)
+        ) {
+            throw new NotFoundException('Wallet not found.');
+        }
+
+        $transactions =  $this->transactionRepository->listTransactions($wallet->getUser());
+
+        return new TransactionCollection($transactions);
     }
 }

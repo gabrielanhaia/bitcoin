@@ -72,4 +72,18 @@ class TransactionController extends Controller
 
         return new TransactionResource($transactionEntity);
     }
+
+    /**
+     * Method responsible for listing all the transactions in a wallet.
+     *
+     * @param string $walletAddress Wallet address to search for the transaction.
+     * @return TransactionEntity[]|\Illuminate\Support\Collection
+     * @throws NotFoundException
+     */
+    public function listTransactionsByWallet(string $walletAddress)
+    {
+        $transactions = $this->transactionService->listTransactionsByWallet($walletAddress);
+
+        return $transactions;
+    }
 }
