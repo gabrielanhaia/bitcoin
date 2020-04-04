@@ -66,7 +66,7 @@ class WalletRepository
     }
 
     /**
-     * Search for a wallet with its wallet address.
+     * Search for a wallet by wallet address.
      *
      * @param string $walletAddress Wallet address.
      * @return WalletEntity|null
@@ -85,6 +85,30 @@ class WalletRepository
 
         $walletEntity = new WalletEntity($walletResult->id);
         $walletEntity->setAddress($walletAddress)
+            ->setName($walletResult->name)
+            ->setUser($walletUserEntity);
+
+        return $walletEntity;
+    }
+
+    /**
+     * Search for a wallet by wallet id.
+     *
+     * @param int $id Waller id to be searched.
+     * @return WalletEntity|null
+     */
+    public function find(int $id): ?WalletEntity
+    {
+        $walletResult = $this->walletModel->find($id);
+
+        if (empty($walletResult)) {
+            return null;
+        }
+
+        $walletUserEntity = new UserEntity($walletResult->user_id);
+
+        $walletEntity = new WalletEntity($walletResult->id);
+        $walletEntity->setAddress($walletResult->address)
             ->setName($walletResult->name)
             ->setUser($walletUserEntity);
 
