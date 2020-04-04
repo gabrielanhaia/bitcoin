@@ -3,8 +3,11 @@
 
 namespace App\Repositories;
 
+use App\Entities\Enums\TransactionStatusEnum;
+use App\Entities\Enums\TransactionTypeEnum;
 use App\Entities\Transaction as TransactionEntity;
 use App\Models\Transaction;
+use Carbon\Carbon;
 
 /**
  * Class TransactionRepository
@@ -12,18 +15,23 @@ use App\Models\Transaction;
  *
  * @author Gabriel Anhaia <anhaia.gabriel@gmail.com>
  */
-class TransactionRepository
+class TransactionRepository extends Repository
 {
     /** @var Transaction $transactionModel Model os transactions (eloquent model). */
     private $transactionModel;
 
+    /** @var WalletRepository $walletRepository Repository of wallets. */
+    private $walletRepository;
+
     /**
      * TransactionRepository constructor.
      * @param Transaction $transactionModel
+     * @param WalletRepository $walletRepository
      */
-    public function __construct(Transaction $transactionModel)
+    public function __construct(Transaction $transactionModel, WalletRepository $walletRepository)
     {
         $this->transactionModel = $transactionModel;
+        $this->walletRepository = $walletRepository;
     }
 
     /**
@@ -47,5 +55,44 @@ class TransactionRepository
         ]);
 
         $transactionEntity->setId($transactionCreated->id);
+    }
+
+    /**
+     * Method responsible for search a transaction in the Database/Data source.
+     *
+     * @param int $transactionId Transaction identifier to be searched.
+     * @return TransactionEntity|null
+     */
+    public function find(int $transactionId): ?TransactionEntity
+    {
+        $transactionResponse = $this->transactionModel->find($transactionId);
+
+        if (empty($transactionResponse)) {
+            return null;
+        }
+
+        $wallet = $this->walletRepository->find($transactionResponse->wallet_id);
+        $walletOrigin = $this->walletRepository->find($transactionResponse->wallet_id_origin);
+        $walletDestination = $this->walletRepository->find($transactionResponse->wallet_id_destination);
+
+        $transactionEntity = new TransactionEntity($transactionResponse->id);
+        $transactionEntity->setWallet($wallet)
+            ->setWalletOrigin($walletOrigin)
+            ->setWalletDestination($walletDestination)
+            ->setType(TransactionTypeEnum::memberByValue($transactionResponse->type))
+            ->setStatus(TransactionStatusEnum::memberByValue($transactionResponse->status))
+            ->setBalance($transactionResponse->balance)
+            ->setGrossValue($transactionResponse->gross_value)
+            ->setNetValue($transactionResponse->net_value)
+            ->setProfitPercentage($transactionResponse->profit_percentage)
+            ->setTotalProfit($transactionResponse->total_profit)
+            ->setRequestedAt(Carbon::createFromFormat('Y-m-d H:i:s', $transactionResponse->requested_at))
+            ->setObservation($transactionResponse->observation);
+
+        if (!empty($transactionResponse->processed_at)) {
+            $transactionEntity->setProcessedAt(Carbon::createFromFormat('Y-m-d H:i:s', $transactionResponse->processed_at));
+        }
+
+        return $transactionEntity;
     }
 }
