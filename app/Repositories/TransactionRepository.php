@@ -41,7 +41,7 @@ class TransactionRepository extends Repository
      */
     public function createTransaction(TransactionEntity $transactionEntity)
     {
-        $transactionCreated = $this->transactionModel::create([
+        $transactionData = [
             'wallet_id' => $transactionEntity->getWallet()->getId(),
             'type' => $transactionEntity->getType()->value(),
             'status' => $transactionEntity->getStatus()->value(),
@@ -52,9 +52,42 @@ class TransactionRepository extends Repository
             'requested_at' => $transactionEntity->getRequestedAt(),
             'wallet_id_origin' => $transactionEntity->getWalletOrigin()->getId(),
             'wallet_id_destination' => $transactionEntity->getWalletDestination()->getId()
-        ]);
+        ];
+
+        if ($transactionEntity->getBalance() !== null) {
+            $transactionData['balance'] = $transactionEntity->getBalance();
+        }
+
+        if (!empty($transactionEntity->getProcessedAt())) {
+            $transactionData['processed_at'] = $transactionEntity->getProcessedAt();
+        }
+
+        $transactionCreated = $this->transactionModel::create($transactionData);
 
         $transactionEntity->setId($transactionCreated->id);
+    }
+
+    /**
+     * Return the last total balance in the transactions.
+     *
+     * @param int $walletId
+     * @return int
+     */
+    public function getLastTotalBalanceByWallet(int $walletId): int
+    {
+        $lastTransactionBalanceResult = $this->transactionModel
+            ->select('transactions.balance')
+            ->where('transactions.wallet_id', '=', $walletId)
+            ->where('transactions.status', '=', TransactionStatusEnum::PROCESSED)
+            ->orderBy('transactions.id', 'DESC')
+            ->limit(1)
+            ->first();
+
+        $lastTransactionBalance = $lastTransactionBalanceResult
+            ? $lastTransactionBalanceResult->balance
+            : 0;
+
+        return (int)$lastTransactionBalance;
     }
 
     /**
@@ -94,5 +127,44 @@ class TransactionRepository extends Repository
         }
 
         return $transactionEntity;
+    }
+
+    /**
+     * Method responsible for updating a transaction.
+     *
+     * @param TransactionEntity $transactionEntity Transaction to be updated.
+     *
+     * TODO: Improve the updates (fields not filled).
+     */
+    public function updateTransaction(TransactionEntity $transactionEntity)
+    {
+        $this->transactionModel::where('id', '=', $transactionEntity->getId())
+            ->update([
+                'status' => $transactionEntity->getStatus()->value(),
+                'balance' => $transactionEntity->getBalance(),
+                'processed_at' => $transactionEntity->getProcessedAt()
+            ]);
+    }
+
+    /**
+     * @param int $transactionId Transaction identifier to be updated.
+     * @param TransactionStatusEnum $transactionStatusEnum New transaction status.
+     * @param string $observation Observations to be updated.
+     */
+    public function updateTransactionStatus(
+        int $transactionId,
+        TransactionStatusEnum $transactionStatusEnum,
+        string $observation = null
+    )
+    {
+        $transactionResult = $this->transactionModel->find($transactionId);
+
+        $transactionResult->status = $transactionStatusEnum->value();
+
+        if (!empty($observation)) {
+            $transactionResult->observation = $observation;
+        }
+
+        $transactionResult->save();
     }
 }

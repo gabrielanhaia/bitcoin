@@ -15,7 +15,7 @@ use App\Models\User;
  *
  * @author Gabriel Anhaia <anhaia.gabriel@gmail.com>
  */
-class UserRepository
+class UserRepository extends Repository
 {
     /** @var User $userModel Current user model. */
     protected $userModel;

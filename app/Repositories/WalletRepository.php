@@ -15,7 +15,7 @@ use App\Models\Wallet;
  *
  * @author Gabriel Anhaia <anhaia.gabriel@gmail.com>
  */
-class WalletRepository
+class WalletRepository extends Repository
 {
     /** @var Wallet $walletModel Current wallet model. */
     protected $walletModel;

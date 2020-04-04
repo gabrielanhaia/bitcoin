@@ -12,7 +12,7 @@ use App\Models\Setting;
  *
  * @author Gabriel Anhaia <anhaia.gabriel.com>
  */
-class SettingRepository
+class SettingRepository extends Repository
 {
     /** @var Setting $settingModel Model of settings. */
     private $settingModel;
