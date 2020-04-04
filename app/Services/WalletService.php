@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Entities\Wallet as WalletEntity;
 use App\Exceptions\Api\ForbiddenException;
-use App\Models\Wallet;
 use App\Repositories\WalletRepository;
 use BitWasp\Bitcoin\{Address\Address,
     Address\AddressCreator,

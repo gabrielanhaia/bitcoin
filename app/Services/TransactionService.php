@@ -3,8 +3,8 @@
 
 namespace App\Services;
 
-use App\Entities\Enums\TransactionStatusEnum;
-use App\Entities\Enums\TransactionTypeEnum;
+use App\Repositories\SettingRepository;
+use App\Entities\Enums\{TransactionStatusEnum, TransactionTypeEnum};
 use App\Entities\Transaction as TransactionEntity;
 use App\Repositories\TransactionRepository;
 use Carbon\Carbon;
@@ -20,13 +20,21 @@ class TransactionService
     /** @var TransactionRepository $transactionRepository Repository of transactions. */
     private $transactionRepository;
 
+    /** @var SettingRepository $settingRepository Repository of settings. */
+    private $settingRepository;
+
     /**
      * TransactionService constructor.
      * @param TransactionRepository $transactionRepository
+     * @param SettingRepository $settingRepository
      */
-    public function __construct(TransactionRepository $transactionRepository)
+    public function __construct(
+        TransactionRepository $transactionRepository,
+        SettingRepository $settingRepository
+    )
     {
         $this->transactionRepository = $transactionRepository;
+        $this->settingRepository = $settingRepository;
     }
 
     /**
@@ -42,9 +50,15 @@ class TransactionService
 
         if ($transactionEntity->getWalletOrigin()->getUser()->getId()
             || $transactionEntity->getWalletDestination()->getUser()->getId()) {
-            // TODO: Change to load from settings.
-            $profitPercentage = 1.5;
-            $totalProfit = ($transactionEntity->getGrossValue() / 100) * $profitPercentage;
+
+            $settingProfitPercentage = $this->settingRepository->getSetting('profit_transfers');
+
+            if ($settingProfitPercentage !== null) {
+                $profitPercentage = $settingProfitPercentage->getValue();
+                $totalProfit = ($transactionEntity->getGrossValue() / 100) * $profitPercentage;
+                $totalProfit = round($totalProfit);
+                $netValue = $transactionEntity->getGrossValue() - $totalProfit;
+            }
         }
 
         $transactionEntity->setStatus(TransactionStatusEnum::PENDING())
