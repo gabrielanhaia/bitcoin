@@ -1,79 +1,116 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+[![CircleCI](https://circleci.com/gh/gabrielanhaia/bitcoin/tree/master.svg?style=svg)](https://circleci.com/gh/gabrielanhaia/bitcoin/tree/master)
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+# Paxful - test
 
-## About Laravel
+## Running the project without docker
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+1. For some reason the Guzzle Http can't access the same server when we are using (PHP built in / php artisan serve).
+So I recommend that you install in you machine Apache or Nginx and clone the folder inside your web directory. The index should be the folder *public*.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+2. Copy the file *.env.example* to *.env* and change the variables bellow with your database options:
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_DATABASE=default
+DB_USERNAME=default
+DB_PASSWORD=secret
+DB_PORT=3306
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+3. Run the command `composer install`
+4. Run `php artisan key:generate`
+5. Run `php artisan migrate`
+6. Run `paxful:exchange_rates:manual_import`
+7. Enjoy :)
 
-## Learning Laravel
+## Running the project by Docker
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. Access the folder *laradock* and run: <br>
+```docker-compose up -d nginx mysql ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. Copy the file *.env.example* to *.env* and change the variables bellow with this values:
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_DATABASE=default
+DB_USERNAME=default
+DB_PASSWORD=secret
+DB_PORT=3306
 
-## Laravel Sponsors
+3. Run the command `composer install`
+4. Run `php artisan key:generate`
+5. Run `php artisan migrate`
+6. Run `paxful:exchange_rates:manual_import`
+7. Enjoy :)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## About the Project
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
-- [云软科技](http://www.yunruan.ltd/)
+Important points about my test that I tried to follow (always):
 
-## Contributing
+1. To write a clear code easily to maintain (any developer)
+2. Try to use Design Patterns (Only in situations that really make sense).
+3. to follow the SOLID principles
+4. Cover the project with Unit tests as much as possible (I wrote a few tests, It's not 100% covered).
+5. PHP and developing without a framework (on the integration packages to get the exchange rates)
+6. Organization (I used the Trello for controlling all tasks, I can share it with you if you would like).
+7. PSRs.
+8. Use different layers to organize the project when it grows (Repositories and Services)
+9. Micro commits with clear messages.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+*DONT FORGET TO LOOK AT THIS PACKAGE (It is part of the test)*<br>
+[LINK HERE]<link.here>
 
-## Code of Conduct
+## Important things implemented by me
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. Repository layer: It implemented it to encapsulate the ORM (eloquent/data sources). Who knows if in the future we will change the things.
+2. My repositories are receiving and returning Entities. I try to use this patter in big projects because it's much better the arrays that can't guarantee the data passed to the methods.
+Besides that, with Entities (DTO), We can easily change the data source in the repositories (if it is necessary).
+3. I am using the Service Layer to put the logic, on this way it's easier for the developers to maintain the project. Besides that, it is easier to test.
+4. The repositories, services and models are all being injected by the Container (DI Laravel).
+5. I am versioning the API, if we have APPs, web platforms and/or external integrations consuming our API, it will be easier to change/improve the endpoints.
+6. The API token is really simple (as the required), it's just a api_token on the user table, in a real project we would think about a JWT token and maybe user OAuth...
+7. I put all the models in an especific directory (I do not know why the Laravel don't change it, it is a mess).
+8. The database was projected with index to speed up the queries (You can see the model on `database/`, there are a few files there.
+9. I am getting the properties by the objects and you can see that in some layers I am not getting the object in the return (just using the normal behavior of the objects), for sure I agree it would be defined at the beginning of the project. I think it is an important thing to be defined, new developers can get confused with the object references.
+10. To be sure that the last amount is correct I am getting by the transaction order (processed_at) (status = PROCESSED)
+11. There are maybe 2 comments inside the methods (to explain something). I would never put a comment inside a method. I follow the principle that any developer should look at a method and understand it by himself.
+12. In a real application, I would create an account (Paxful account) to store the company bitcoins to transfer the initial amount (debit) and earn the profit (credit)
+13. I created a table to store settings (You can see there the "Maximum of wallets per user", "Bonus of bitcoins for new users" and "Profit per transfers between different users")
+14. I created a manual importer (app/Console/Commands/ManualImportExchangeRates.php) for the exchange rates. I created it just to import all the rates quickly, so I can test my endpoints. My goal is to start the official importer (integration with the API) if I don't have enough time to do everything I am planning for the project.
+15. The transactions are processed in a Queue (centralized), in production environment we could use REDIS and have different machines running our webserver. All of then would send the jobs to be processed in the same queue.
 
-## Security Vulnerabilities
+## The problems founded and observations
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+I have found different problems to solve in this project, a few of them were:
+1. The security (It is working with money).
+2. Don't lose transactions (never).
+3. Keep the transactions/balance organized.
+4. Loads of validations to don't duplicate or allow the users earn bitcoins.
+
+## Technologies/Methodologies
+
+**PHP 7.3**
+**Laravel**
+**Docker/Laradock**
+**Composer**
+**MySql 5.7**
+**PHPUnit:**
+**CircleCi:**
+**Trello:** I tried to follow the scrum principles (actually planning and using the kanban) to keep the project organized. In the cards, there are the number of the issues on GitHub.
+**PSRs:** I am following the PSR's for a clean code.
+** Another technologies:** GitHub, GIT
+
+## Tests
+
+I didn't implement all unit tests, there are more unit tests on the packages (integrations). But there are a few important tests that could be checked.
+
+Running the tests: `php vendor/bin/phpunit`
+
+## Things to improve
+
+1. Database: I don't think mysql is a problem, but I was searching about different approaches ant technologies, I found new digital banks that have a similar structure of the transaction tables. They are using a database called Datomic (https://www.datomic.com/nubanks-story.html)
+It is really interesting.
+2. Security
+3. An account to store the Paxful Bitcoins (profit, bonus for first wallets...)
+4. Helpers.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+It is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
