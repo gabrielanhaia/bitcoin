@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Entities\Wallet as WalletEntity;
 use App\Exceptions\Api\ForbiddenException;
+use App\Repositories\SettingRepository;
 use App\Repositories\WalletRepository;
 use BitWasp\Bitcoin\{Address\Address,
     Address\AddressCreator,
@@ -21,20 +22,30 @@ use Illuminate\Support\Str;
  */
 class WalletService
 {
-    /** @var WalletRepository $walletRepository Repository of wallets. */
-    private $walletRepository;
-
     /** @var TransactionService $transactionService Service of transactions. */
     private $transactionService;
 
+    /** @var WalletRepository $walletRepository Repository of wallets. */
+    private $walletRepository;
+
+    /** @var SettingRepository $settingRepository Repository of settings.  */
+    private $settingRepository;
+
     /**
      * UserService constructor.
-     * @param WalletRepository $walletRepository
-     * @param TransactionService $transactionService
+     *
+     * @param TransactionService $transactionService Service of transactions.
+     * @param WalletRepository $walletRepository Repository of wallets.
+     * @param SettingRepository $settingRepository Repository of settings.
      */
-    public function __construct(WalletRepository $walletRepository, TransactionService $transactionService)
+    public function __construct(
+        TransactionService $transactionService,
+        WalletRepository $walletRepository,
+        SettingRepository $settingRepository
+    )
     {
         $this->walletRepository = $walletRepository;
+        $this->settingRepository = $settingRepository;
         $this->transactionService = $transactionService;
     }
 
@@ -53,8 +64,9 @@ class WalletService
 
         $totalWalletsUser = $this->walletRepository->getTotalWalletsUser($userId);
 
+
         if ($totalWalletsUser === 10) {
-            throw new ForbiddenException("You can't have more than 10 wallets.");
+            throw new ForbiddenException('You can\'t have more than 10 wallets.');
         }
 
         if (empty($walletEntity->getName())) {
