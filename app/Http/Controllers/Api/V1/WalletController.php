@@ -6,6 +6,7 @@ use App\Exceptions\Api\ForbiddenException;
 use App\Exceptions\Api\InternalServerErrorException;
 use App\Exceptions\Api\NotFoundException;
 use App\Repositories\TransactionRepository;
+use App\Services\TransactionService;
 use BitWasp\Bitcoin\Exceptions\RandomBytesFailure;
 use App\Entities\{Wallet, User};
 use App\Http\Controllers\Controller;
@@ -28,16 +29,25 @@ class WalletController extends Controller
     /** @var TransactionRepository $transactionRepository Repository of transactions. */
     private $transactionRepository;
 
+    /** @var TransactionService $transactionService Service of transactions. */
+    private $transactionService;
+
     /**
      * WalletController constructor.
      *
      * @param WalletService $walletService
+     * @param TransactionService $transactionService
      * @param TransactionRepository $transactionRepository
      */
-    public function __construct(WalletService $walletService, TransactionRepository $transactionRepository)
+    public function __construct(
+        WalletService $walletService,
+        TransactionService $transactionService,
+        TransactionRepository $transactionRepository
+    )
     {
         $this->walletService = $walletService;
         $this->transactionRepository = $transactionRepository;
+        $this->transactionService = $transactionService;
     }
 
     /**
@@ -80,8 +90,16 @@ class WalletController extends Controller
             throw new NotFoundException('Wallet not found.');
         }
 
+        $lastTotalBalance = $this->transactionRepository->getLastTotalBalanceByWallet($wallet->getId());
+
         $extraInformation = [
-            'balance_bitcoin' => $this->transactionRepository->getLastTotalBalanceByWallet($wallet->getId())
+            'balance_bitcoin' => $lastTotalBalance,
+            'balance_dollar' => $this->transactionService
+                ->convertBitCoinsToAnotherCurrency($lastTotalBalance, 'USD'),
+            'balance_euro' => $this->transactionService
+                ->convertBitCoinsToAnotherCurrency($lastTotalBalance, 'EUR'),
+            'balance_brazilian_real' =>  $this->transactionService
+                ->convertBitCoinsToAnotherCurrency($lastTotalBalance, 'BRL')
         ];
 
         return new WalletResource($wallet, $extraInformation);

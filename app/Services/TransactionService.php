@@ -3,13 +3,14 @@
 
 namespace App\Services;
 
+use App\Entities\ExchangeRate;
 use App\Entities\Wallet as WalletEntity;
 use App\Exceptions\{Api\NotFoundException,
     Transaction\InsufficientFoundsException,
     Transaction\TransactionAlreadyProcessedException,
     Transaction\TransactionNotFoundException};
 use App\Jobs\TransactionProcessor;
-use App\Repositories\{SettingRepository, WalletRepository, TransactionRepository, UserRepository};
+use App\Repositories\{CurrencyRepository, SettingRepository, WalletRepository, TransactionRepository, UserRepository};
 use Illuminate\Support\{Collection, Facades\Auth};
 use App\Entities\Enums\{TransactionStatusEnum, TransactionTypeEnum};
 use App\Entities\Transaction as TransactionEntity;
@@ -35,6 +36,9 @@ class TransactionService
     /** @var UserRepository $userRepository Repository of users. */
     private $userRepository;
 
+    /** @var CurrencyRepository $currencyRepository Repository of currencies. */
+    private $currencyRepository;
+
     /**
      * TransactionService constructor.
      * @param TransactionRepository $transactionRepository
@@ -46,13 +50,15 @@ class TransactionService
         TransactionRepository $transactionRepository,
         SettingRepository $settingRepository,
         WalletRepository $walletRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        CurrencyRepository $currencyRepository
     )
     {
         $this->transactionRepository = $transactionRepository;
         $this->settingRepository = $settingRepository;
         $this->walletRepository = $walletRepository;
         $this->userRepository = $userRepository;
+        $this->currencyRepository = $currencyRepository;
     }
 
     /**
@@ -230,5 +236,29 @@ class TransactionService
         $transactions = $this->transactionRepository->listTransactions($userId);
 
         return $transactions;
+    }
+
+    /**
+     * Convert an amount of bitcoins to another currency.
+     *
+     * @param int $totalBitCoins Total bitcoins to be converted.
+     * @param string $currencyName Currency name to convert.
+     * @return float|null
+     */
+    public function convertBitCoinsToAnotherCurrency(
+        int $totalBitCoins,
+        string $currencyName
+    ): ?float
+    {
+        $exchangeRate = $this->currencyRepository
+            ->findExchangeRateByExchangeName($currencyName);
+
+        if (empty($exchangeRate) || $exchangeRate->getBitcoinAmount() <= 0) {
+            return null;
+        }
+
+        $result = ($exchangeRate->getAmount() * $totalBitCoins) / $exchangeRate->getBitcoinAmount();
+
+        return $result;
     }
 }
