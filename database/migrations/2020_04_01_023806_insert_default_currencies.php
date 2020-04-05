@@ -21,12 +21,12 @@ class InsertDefaultCurrencies extends Migration
     public function up()
     {
         Currency::create([
-            'name' => 'US Dollar',
+            'name' => 'USD',
             'created_at' => new DateTime()
         ]);
 
         Currency::create([
-            'name' => 'Euro',
+            'name' => 'EUR',
             'created_at' => new DateTime()
         ]);
     }

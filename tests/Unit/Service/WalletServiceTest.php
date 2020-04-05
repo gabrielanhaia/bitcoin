@@ -6,7 +6,7 @@ namespace Tests\Unit;
 use App\Entities\{Setting as SettingEntity, Setting, User as UserEntity, Wallet as WalletEntity};
 use App\Exceptions\Api\ForbiddenException;
 use App\Helpers\Facades\TokenFacade;
-use App\Repositories\{SettingRepository, WalletRepository};
+use App\Repositories\{SettingRepository, TransactionRepository, WalletRepository};
 use App\Services\TransactionService;
 use App\Services\WalletService;
 use Tests\TestCase;
@@ -264,5 +264,33 @@ class WalletServiceTest extends TestCase
         $walletEntityResult = $walletService->createWallet($walletEntity);
 
         $this->assertEquals($walletEntityExpectedResult, $walletEntityResult);
+    }
+
+    /**
+     * Test success finding wallet by address.
+     */
+    public function testFindWalletByAddress()
+    {
+        $walletAddress = '43sksdSDAdsaidjasji324343fDsasdsa';
+
+        $walletEntity = new WalletEntity(2323);
+        $walletEntity->setName('NAME')
+            ->setAddress($walletAddress)
+            ->setUser(new UserEntity(3342));
+
+        $walletRepositoryMock = \Mockery::mock(WalletRepository::class);
+        $walletRepositoryMock->shouldReceive('findWalletByAddress')
+            ->once()
+            ->with($walletAddress)
+            ->andReturn($walletEntity);
+
+        $transactionService = \Mockery::mock(TransactionService::class);
+        $settingRepository = \Mockery::mock(SettingRepository::class);
+
+        $walletService = new WalletService($transactionService, $walletRepositoryMock, $settingRepository);
+
+        $result = $walletService->findWalletByAddress($walletAddress);
+
+        $this->assertEquals($walletEntity, $result);
     }
 }
