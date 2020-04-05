@@ -55,7 +55,8 @@ class TransactionRepository extends Repository
                 : null,
             'wallet_id_destination' => $transactionEntity->getWalletDestination()
                 ? $transactionEntity->getWalletDestination()->getId()
-                : null
+                : null,
+            'observation' => $transactionEntity->getObservation()
         ];
 
         if ($transactionEntity->getBalance() !== null) {

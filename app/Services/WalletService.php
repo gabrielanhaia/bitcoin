@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Entities\Wallet as WalletEntity;
 use App\Exceptions\Api\ForbiddenException;
+use App\Helpers\Facades\TokenFacade;
 use App\Repositories\SettingRepository;
 use App\Repositories\WalletRepository;
 use BitWasp\Bitcoin\{Address\Address,
@@ -28,7 +29,7 @@ class WalletService
     /** @var WalletRepository $walletRepository Repository of wallets. */
     private $walletRepository;
 
-    /** @var SettingRepository $settingRepository Repository of settings.  */
+    /** @var SettingRepository $settingRepository Repository of settings. */
     private $settingRepository;
 
     /**
@@ -64,47 +65,35 @@ class WalletService
 
         $totalWalletsUser = $this->walletRepository->getTotalWalletsUser($userId);
 
+        $maxWalletsPerUserSetting = $this->settingRepository->getSetting('max_wallets_user');
+        $maxWalletsPerUser = $maxWalletsPerUserSetting ? $maxWalletsPerUserSetting->getValue() : 10;
 
-        if ($totalWalletsUser === 10) {
-            throw new ForbiddenException('You can\'t have more than 10 wallets.');
+        if ($totalWalletsUser >= $maxWalletsPerUser) {
+            throw new ForbiddenException("You can't have more than {$maxWalletsPerUser} wallets.");
         }
 
         if (empty($walletEntity->getName())) {
-            $walletName = 'Wallet ' . Str::random(6);
+            $walletName = 'Wallet ' . TokenFacade::random(6);
             $walletEntity->setName($walletName);
         }
 
-        $address = $this->generateWalletAddress();
-        $walletEntity->setAddress($address->getAddress());
+        $address = TokenFacade::generateWalletAddress();
+        $walletEntity->setAddress($address);
 
         $this->walletRepository
             ->createWallet($walletEntity);
 
         if ($totalWalletsUser === 0) {
-            $totalBitCoins = 100000000;
-            $this->transactionService->creditAmount($walletEntity, $totalBitCoins);
+            $bonusBitCoinsFirstWallet = $this->settingRepository->getSetting('bonus_bitcoin_first_wallet');
+            $totalBitCoins = $bonusBitCoinsFirstWallet ? $bonusBitCoinsFirstWallet->getValue() : 0;
+            $totalBitCoins = (int) $totalBitCoins;
+
+            if ($totalBitCoins > 0) {
+                $this->transactionService->creditAmount($walletEntity, $totalBitCoins, 'Bonus first wallet.');
+            }
         }
 
         return $walletEntity;
-    }
-
-    /**
-     * Generate a address.
-     *
-     * @return Address
-     * @throws RandomBytesFailure
-     */
-    private function generateWalletAddress()
-    {
-        $privateKeyFactory = new PrivateKeyFactory;
-        $privateKey = $privateKeyFactory->generateCompressed(new Random());
-        $publicKey = $privateKey->getPublicKey();
-        $addrCreator = new AddressCreator();
-        $factory = new P2pkhScriptDataFactory();
-        $scriptPubKey = $factory->convertKey($publicKey)->getScriptPubKey();
-        $address = $addrCreator->fromOutputScript($scriptPubKey);
-
-        return $address;
     }
 
     /**

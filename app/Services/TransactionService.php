@@ -170,8 +170,9 @@ class TransactionService
      *
      * @param WalletEntity $walletEntity Wallet to insert the bitcoins.
      * @param int $totalBitCoins Amount of bitcoins to be credited.
+     * @param null|string $observation Observation for transaction.
      */
-    public function creditAmount(WalletEntity $walletEntity, int $totalBitCoins)
+    public function creditAmount(WalletEntity $walletEntity, int $totalBitCoins, string $observation = null)
     {
         $lastTotalBalanceWallet = $this->transactionRepository
             ->getLastTotalBalanceByWallet($walletEntity->getId());
@@ -186,7 +187,8 @@ class TransactionService
             ->setGrossValue($totalBitCoins)
             ->setNetValue($totalBitCoins)
             ->setType(TransactionTypeEnum::CREDIT())
-            ->setStatus(TransactionStatusEnum::PROCESSED());
+            ->setStatus(TransactionStatusEnum::PROCESSED())
+            ->setObservation($observation);
 
         $this->transactionRepository->createTransaction($transaction);
     }

@@ -269,7 +269,7 @@ class Transaction extends AbstractEntity
      * @param string $observation
      * @return Transaction
      */
-    public function setObservation(string $observation): Transaction
+    public function setObservation(string $observation = ''): Transaction
     {
         $this->observation = $observation;
         return $this;

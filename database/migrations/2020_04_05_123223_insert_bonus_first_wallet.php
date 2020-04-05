@@ -4,13 +4,11 @@ use App\Models\Setting;
 use Illuminate\Database\Migrations\Migration;
 
 /**
- * Class InsertMaxWalletsSetting
+ * Class InsertBonusFirstWallet
  *
- * Migration created to insert the default 'max wallets per user' setting.
- * (I saw this approach inserting on a migration in a different project)
- * (I think it is an interesting way to guarantee the insertion)
+ * @author Gabriel Anhaia <anhaia.gabriel@gmail.com>
  */
-class InsertMaxWalletsSetting extends Migration
+class InsertBonusFirstWallet extends Migration
 {
     /**
      * Run the migrations.
@@ -21,8 +19,8 @@ class InsertMaxWalletsSetting extends Migration
     public function up()
     {
         Setting::create([
-            'name' => 'max_wallets_user',
-            'value' => 10,
+            'name' => 'bonus_bitcoin_first_wallet',
+            'value' => 100000000,
             'created_at' => new DateTime
         ]);
     }
