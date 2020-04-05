@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Entities\User as UserEntity;
+use App\Helpers\Facades\TokenFacade;
 use App\Exceptions\Api\{ConflictException, InternalServerErrorException};
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
@@ -46,7 +47,7 @@ class UserService
         }
 
         $userPassword = Hash::make($userEntity->getPassword());
-        $userApiToken = Str::random(60);
+        $userApiToken = TokenFacade::generateApiToken();
 
         $userEntity->setPassword($userPassword)
             ->setApiToken($userApiToken);
