@@ -5,9 +5,7 @@ namespace App\Repositories;
 
 use App\Entities\{Enums\TransactionStatusEnum,
     Enums\TransactionTypeEnum,
-    Transaction as TransactionEntity,
-    Wallet as WalletEntity,
-    User as UserEntity};
+    Transaction as TransactionEntity};
 use App\Models\Transaction;
 use Carbon\Carbon;
 
