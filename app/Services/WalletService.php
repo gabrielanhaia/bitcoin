@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Entities\Wallet as WalletEntity;
 use App\Exceptions\Api\ForbiddenException;
+use App\Exceptions\Api\NotFoundException;
 use App\Helpers\Facades\TokenFacade;
 use App\Repositories\SettingRepository;
 use App\Repositories\WalletRepository;
@@ -101,11 +102,16 @@ class WalletService
      *
      * @param string $walletAddress Wallet address.
      * @return WalletEntity
+     * @throws NotFoundException
      */
     public function findWalletByAddress(string $walletAddress): WalletEntity
     {
         $walletEntity = $this->walletRepository
             ->findWalletByAddress($walletAddress);
+
+        if (empty($walletEntity)) {
+            throw new NotFoundException('Wallet not found.');
+        }
 
         return $walletEntity;
     }
