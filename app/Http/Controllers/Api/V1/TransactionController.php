@@ -49,6 +49,7 @@ class TransactionController extends Controller
      * @param Auth $auth
      * @return TransactionResource
      * @throws NotFoundException
+     * @throws \App\Exceptions\Api\UnprocessableEntityException
      */
     public function makeTransfer(CreateTransactionRequest $request, Auth $auth): TransactionResource
     {

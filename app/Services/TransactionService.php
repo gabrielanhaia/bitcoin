@@ -6,6 +6,7 @@ namespace App\Services;
 use App\Entities\ExchangeRate;
 use App\Entities\Wallet as WalletEntity;
 use App\Exceptions\{Api\NotFoundException,
+    Api\UnprocessableEntityException,
     Transaction\InsufficientFoundsException,
     Transaction\TransactionAlreadyProcessedException,
     Transaction\TransactionNotFoundException};
@@ -65,9 +66,15 @@ class TransactionService
      * Method responsible for creating a new transaction (Transfer).
      *
      * @param TransactionEntity $transactionEntity Transaction to be created.
+     * @throws UnprocessableEntityException
      */
     public function makeTransfer(TransactionEntity $transactionEntity)
     {
+        if ($transactionEntity->getWalletOrigin()->getId() === $transactionEntity->getWalletDestination()->getId()) {
+            throw new UnprocessableEntityException('You can\'t transfer bitCoins to the same account');
+        }
+
+
         $profitPercentage = 0;
         $totalProfit = 0;
         $netValue = $transactionEntity->getGrossValue();
