@@ -1,5 +1,6 @@
-[![CircleCI](https://circleci.com/gh/gabrielanhaia/bitcoin/tree/master.svg?style=svg)](https://circleci.com/gh/gabrielanhaia/bitcoin/tree/master)
-
+[![CircleCI](https://circleci.com/gh/gabrielanhaia/bitcoin/tree/master.svg?style=svg&circle-token=41d95a85d2f0b2ac88eb5eaaa36a7a920eed23c9)](https://circleci.com/gh/gabrielanhaia/bitcoin/tree/master)
+    <img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License">
+    
 # Paxful - test
 
 ## Running the project without docker
