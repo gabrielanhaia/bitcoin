@@ -7,8 +7,6 @@ namespace App\Entities;
  * Class Wallet
  * @package App\Entities
  *
- * TODO: Create new fields (User,...)
- *
  * @author Gabriel Anhaia <anhaia.gabriel@gmail.com>
  */
 class Wallet extends AbstractEntity

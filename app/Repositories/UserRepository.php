@@ -44,20 +44,17 @@ class UserRepository extends Repository
             return null;
         }
 
-        $userEntity = new UserEntity;
+        $userEntity = new UserEntity($userResult->id);
         $userEntity->setName($userResult->name)
             ->setEmail($userResult->email)
             ->setPassword($userResult->password)
-            ->setApiToken($userResult->api_token)
-            ->setId($userResult->id);
+            ->setApiToken($userResult->api_token);
 
         return $userEntity;
     }
 
     /**
      * Create a new user.
-     *
-     * TODO: Change exception (custom).
      *
      * @param UserEntity $userEntity User to be created.
      * @throws \Exception
