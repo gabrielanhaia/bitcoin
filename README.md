@@ -1,7 +1,7 @@
 [![CircleCI](https://circleci.com/gh/gabrielanhaia/bitcoin/tree/master.svg?style=svg&circle-token=41d95a85d2f0b2ac88eb5eaaa36a7a920eed23c9)](https://circleci.com/gh/gabrielanhaia/bitcoin/tree/master)
     <img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License">
     
-# Paxful - Transactions - Test
+Transactions - Test
 
     Author: Gabriel Anhaia
     Email: Anhaia.gabriel@gmail.com
@@ -82,7 +82,7 @@ Besides that, with Entities (DTO), We can easily change the data source in the r
 10. I am getting the properties by the objects and you can see that in some layers I am not getting the object in the return (just using the normal behavior of the objects), for sure I agree it would be defined at the beginning of the project. I think it is an important thing to be defined, new developers can get confused with the object references.
 11. To be sure that the last amount is correct I am getting by the transaction order (processed_at) (status = PROCESSED)
 12. There are maybe 2 comments inside the methods (to explain something). I would never put a comment inside a method. I follow the principle that any developer should look at a method and understand it by himself.
-13. In a real application, I would create an account (Paxful account) to store the company bitcoins to transfer the initial amount (debit) and earn the profit (credit)
+13. In a real application, I would create an account (Company Account/Pa...l) to store the company bitcoins to transfer the initial amount (debit) and earn the profit (credit)
 14. I created a table to store settings (You can see there the "Maximum of wallets per user", "Bonus of bitcoins for new users" and "Profit per transfers between different users")
 15. I created a manual importer (app/Console/Commands/ManualImportExchangeRates.php) for the exchange rates. I created it just to import all the rates quickly, so I can test my endpoints. My goal is to start the official importer (integration with the API) if I don't have enough time to do everything I am planning for the project.
 16. The transactions are processed in a Queue (centralized), in production environment we could use REDIS and have different machines running our webserver. All of then would send the jobs to be processed in the same queue.
@@ -119,7 +119,7 @@ Running the tests: `php vendor/bin/phpunit`
 1. Database: I don't think mysql is a problem, but I was searching about different approaches ant technologies, I found new digital banks that have a similar structure of the transaction tables. They are using a database called Datomic (https://www.datomic.com/nubanks-story.html)
 It is really interesting.
 2. Security
-3. An account to store the Paxful Bitcoins (profit, bonus for first wallets...)
+3. An account to store the Company Bitcoins (profit, bonus for first wallets...)
 4. Helpers.
 
 ## License
