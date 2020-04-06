@@ -63,8 +63,8 @@ Important points about my test that I tried to follow (always):
 8. Use different layers to organize the project when it grows (Repositories and Services)
 9. Micro commits with clear messages.
 
-*DONT FORGET TO LOOK AT THIS PACKAGE (It is part of the test)*<br>
-[LINK HERE]<link.here>
+*DONT FORGET TO LOOK AT THIS PACKAGE (It should be part of the test as an extra, unfortunatelly I didn't have enough time to finish)*<br>
+[https://github.com/gabrielanhaia/integration-api-bitcoin-rates]<https://github.com/gabrielanhaia/integration-api-bitcoin-rates>
 
 ## Important things implemented by me
 
