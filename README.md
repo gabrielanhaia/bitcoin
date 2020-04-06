@@ -3,8 +3,8 @@
     
 # Paxful - Transactions - Test
 
-Author: Gabriel Anhaia
-Email: Anhaia.gabriel@gmail.com
+    Author: Gabriel Anhaia
+    Email: Anhaia.gabriel@gmail.com
 
 # API Documentation
 
