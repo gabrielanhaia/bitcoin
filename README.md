@@ -3,6 +3,9 @@
     
 # Paxful - Transactions - Test
 
+Author: Gabriel Anhaia
+Email: Anhaia.gabriel@gmail.com
+
 # API Documentation
 
 * Postman Collection: https://www.getpostman.com/collections/8272261576b13a4019f5
