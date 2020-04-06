@@ -65,22 +65,24 @@ Important points about my test that I tried to follow (always):
 
 ## Important things implemented by me
 
-1. Repository layer: It implemented it to encapsulate the ORM (eloquent/data sources). Who knows if in the future we will change the things.
-2. My repositories are receiving and returning Entities. I try to use this patter in big projects because it's much better the arrays that can't guarantee the data passed to the methods.
+0. The transactions (Transfers) are stored at the database with a status 'PENDING', then, the transaction is send to a queue to be processed. The result can be two new status 'PROCESSED' or 'NOT_PROCESSED' (When something wrong happens).
+1. Transaction types: There are 4 types "TRANSFER_DEBIT" (The wallet that sends the money), "TRANSFER_CREDIT' (The wallet that receives the money), "DEBIT" (When the account receive money from another source, it could be a deposit, first wallet, etc), "CREDIT" (It could be when someone use a debit card or cash the money).
+2. Repository layer: It implemented it to encapsulate the ORM (eloquent/data sources). Who knows if in the future we will change the things.
+3. My repositories are receiving and returning Entities. I try to use this patter in big projects because it's much better the arrays that can't guarantee the data passed to the methods.
 Besides that, with Entities (DTO), We can easily change the data source in the repositories (if it is necessary).
-3. I am using the Service Layer to put the logic, on this way it's easier for the developers to maintain the project. Besides that, it is easier to test.
-4. The repositories, services and models are all being injected by the Container (DI Laravel).
-5. I am versioning the API, if we have APPs, web platforms and/or external integrations consuming our API, it will be easier to change/improve the endpoints.
-6. The API token is really simple (as the required), it's just a api_token on the user table, in a real project we would think about a JWT token and maybe user OAuth...
-7. I put all the models in an especific directory (I do not know why the Laravel don't change it, it is a mess).
-8. The database was projected with index to speed up the queries (You can see the model on `database/`, there are a few files there.
-9. I am getting the properties by the objects and you can see that in some layers I am not getting the object in the return (just using the normal behavior of the objects), for sure I agree it would be defined at the beginning of the project. I think it is an important thing to be defined, new developers can get confused with the object references.
-10. To be sure that the last amount is correct I am getting by the transaction order (processed_at) (status = PROCESSED)
-11. There are maybe 2 comments inside the methods (to explain something). I would never put a comment inside a method. I follow the principle that any developer should look at a method and understand it by himself.
-12. In a real application, I would create an account (Paxful account) to store the company bitcoins to transfer the initial amount (debit) and earn the profit (credit)
-13. I created a table to store settings (You can see there the "Maximum of wallets per user", "Bonus of bitcoins for new users" and "Profit per transfers between different users")
-14. I created a manual importer (app/Console/Commands/ManualImportExchangeRates.php) for the exchange rates. I created it just to import all the rates quickly, so I can test my endpoints. My goal is to start the official importer (integration with the API) if I don't have enough time to do everything I am planning for the project.
-15. The transactions are processed in a Queue (centralized), in production environment we could use REDIS and have different machines running our webserver. All of then would send the jobs to be processed in the same queue.
+4. I am using the Service Layer to put the logic, on this way it's easier for the developers to maintain the project. Besides that, it is easier to test.
+5. The repositories, services and models are all being injected by the Container (DI Laravel).
+6. I am versioning the API, if we have APPs, web platforms and/or external integrations consuming our API, it will be easier to change/improve the endpoints.
+7. The API token is really simple (as the required), it's just a api_token on the user table, in a real project we would think about a JWT token and maybe user OAuth...
+8. I put all the models in an especific directory (I do not know why the Laravel don't change it, it is a mess).
+9. The database was projected with index to speed up the queries (You can see the model on `database/`, there are a few files there.
+10. I am getting the properties by the objects and you can see that in some layers I am not getting the object in the return (just using the normal behavior of the objects), for sure I agree it would be defined at the beginning of the project. I think it is an important thing to be defined, new developers can get confused with the object references.
+11. To be sure that the last amount is correct I am getting by the transaction order (processed_at) (status = PROCESSED)
+12. There are maybe 2 comments inside the methods (to explain something). I would never put a comment inside a method. I follow the principle that any developer should look at a method and understand it by himself.
+13. In a real application, I would create an account (Paxful account) to store the company bitcoins to transfer the initial amount (debit) and earn the profit (credit)
+14. I created a table to store settings (You can see there the "Maximum of wallets per user", "Bonus of bitcoins for new users" and "Profit per transfers between different users")
+15. I created a manual importer (app/Console/Commands/ManualImportExchangeRates.php) for the exchange rates. I created it just to import all the rates quickly, so I can test my endpoints. My goal is to start the official importer (integration with the API) if I don't have enough time to do everything I am planning for the project.
+16. The transactions are processed in a Queue (centralized), in production environment we could use REDIS and have different machines running our webserver. All of then would send the jobs to be processed in the same queue.
 
 ## The problems founded and observations
 
