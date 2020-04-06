@@ -1,7 +1,7 @@
 [![CircleCI](https://circleci.com/gh/gabrielanhaia/bitcoin/tree/master.svg?style=svg&circle-token=41d95a85d2f0b2ac88eb5eaaa36a7a920eed23c9)](https://circleci.com/gh/gabrielanhaia/bitcoin/tree/master)
     <img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License">
     
-# Paxful - test
+# Paxful - Transactions - Test
 
 # API Documentation
 
@@ -65,8 +65,8 @@ Important points about my test that I tried to follow (always):
 
 ## Important things implemented by me
 
-0. The transactions (Transfers) are stored at the database with a status 'PENDING', then, the transaction is send to a queue to be processed. The result can be two new status 'PROCESSED' or 'NOT_PROCESSED' (When something wrong happens).
-1. Transaction types: There are 4 types "TRANSFER_DEBIT" (The wallet that sends the money), "TRANSFER_CREDIT' (The wallet that receives the money), "DEBIT" (When the account receive money from another source, it could be a deposit, first wallet, etc), "CREDIT" (It could be when someone use a debit card or cash the money).
+0. The transactions (Transfers) are stored at the database with a status 'PENDING', then, the transaction is send to a queue to be processed. The result can be two new status **PROCESSED** or **NOT_PROCESSED** (When something wrong happens).
+1. Transaction types: There are 4 types **TRANSFER_DEBIT** (The wallet that sends the money), **TRANSFER_CREDIT** (The wallet that receives the money), **DEBIT** (When the account receive money from another source, it could be a deposit, first wallet, etc), **CREDIT** (It could be when someone use a debit card or cash the money).
 2. Repository layer: It implemented it to encapsulate the ORM (eloquent/data sources). Who knows if in the future we will change the things.
 3. My repositories are receiving and returning Entities. I try to use this patter in big projects because it's much better the arrays that can't guarantee the data passed to the methods.
 Besides that, with Entities (DTO), We can easily change the data source in the repositories (if it is necessary).
