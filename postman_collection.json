@@ -1,0 +1,242 @@
+{
+	"info": {
+		"_postman_id": "8e6bb1dd-ce51-4ebe-a42f-43c8428a5f92",
+		"name": "Bitcoin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "braian",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "anhaia.gsabrielssa@gmail.com2",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/users",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Wallets",
+			"item": [
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/wallets/15ekUWBzq4cxaQEZd9otv2bKD5hD7Z1ieX?api_token=uNd1RlgiZsX62KNB1rXheMTRSy28RcLRJkoz4EQiNO2TuI6PkdE8L4U0axa2",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"wallets",
+								"15ekUWBzq4cxaQEZd9otv2bKD5hD7Z1ieX"
+							],
+							"query": [
+								{
+									"key": "api_token",
+									"value": "uNd1RlgiZsX62KNB1rXheMTRSy28RcLRJkoz4EQiNO2TuI6PkdE8L4U0axa2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/api/v1/wallets?api_token=uNd1RlgiZsX62KNB1rXheMTRSy28RcLRJkoz4EQiNO2TuI6PkdE8L4U0axa2&name=Test Wallet",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"wallets"
+							],
+							"query": [
+								{
+									"key": "api_token",
+									"value": "uNd1RlgiZsX62KNB1rXheMTRSy28RcLRJkoz4EQiNO2TuI6PkdE8L4U0axa2"
+								},
+								{
+									"key": "name",
+									"value": "Test Wallet"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Transactions (Wallet)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/wallets/1Ny4wby87tLMP3m9j441FTFQzvkgUwWjRt/transactions?api_token=OAD0QeWRnfoObBjIHcz3BTvb0exJKgHbdgEjPMHnv6z2TlzbwDdwcSHcStVm",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"wallets",
+								"1Ny4wby87tLMP3m9j441FTFQzvkgUwWjRt",
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "api_token",
+									"value": "OAD0QeWRnfoObBjIHcz3BTvb0exJKgHbdgEjPMHnv6z2TlzbwDdwcSHcStVm"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "Create (Transfer Money)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "address_destination",
+									"value": "15ekUWBzq4cxaQEZd9otv2bKD5hD7Z1ieX",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "15ekUWBzq4cxaQEZd9otv2bKD5hD7Z1ieX",
+									"type": "text"
+								},
+								{
+									"key": "total_transaction",
+									"value": "100",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/api/v1/transactions?api_token=OAD0QeWRnfoObBjIHcz3BTvb0exJKgHbdgEjPMHnv6z2TlzbwDdwcSHcStVm",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "api_token",
+									"value": "OAD0QeWRnfoObBjIHcz3BTvb0exJKgHbdgEjPMHnv6z2TlzbwDdwcSHcStVm"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Transactions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/transactions?api_token=OAD0QeWRnfoObBjIHcz3BTvb0exJKgHbdgEjPMHnv6z2TlzbwDdwcSHcStVm",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "api_token",
+									"value": "OAD0QeWRnfoObBjIHcz3BTvb0exJKgHbdgEjPMHnv6z2TlzbwDdwcSHcStVm"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

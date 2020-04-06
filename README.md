@@ -3,6 +3,11 @@
     
 # Paxful - test
 
+# API Documentation
+
+* Postman Collection: https://www.getpostman.com/collections/8272261576b13a4019f5
+* Apiary (Online API DOC): https://paxful.docs.apiary.io/#reference/transactions/transactions/transfer-money
+
 ## Running the project without docker
 
 1. For some reason the Guzzle Http can't access the same server when we are using (PHP built in / php artisan serve).
