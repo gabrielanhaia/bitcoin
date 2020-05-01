@@ -9,7 +9,7 @@ Transactions - Test
 # API Documentation
 
 * Postman Collection: https://www.getpostman.com/collections/8272261576b13a4019f5
-* Apiary (Online API DOC): https://paxful.docs.apiary.io/#reference/transactions/transactions/transfer-money
+* Apiary (Online API DOC): https://.docs.apiary.io/#reference/transactions/transactions/transfer-money
 
 ## Running the project without docker
 
@@ -27,7 +27,7 @@ DB_PORT=3306
 3. Run the command `composer install`
 4. Run `php artisan key:generate`
 5. Run `php artisan migrate`
-6. Run `paxful:exchange_rates:manual_import`
+6. Run `:exchange_rates:manual_import`
 7. Enjoy :)
 
 ## Running the project by Docker
@@ -46,7 +46,7 @@ DB_PORT=3306
 3. Run the command `composer install`
 4. Run `php artisan key:generate`
 5. Run `php artisan migrate`
-6. Run `paxful:exchange_rates:manual_import`
+6. Run `:exchange_rates:manual_import`
 7. Enjoy :)
 
 ## About the Project
